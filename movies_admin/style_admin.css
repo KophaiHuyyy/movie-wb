@@ -1711,6 +1711,7 @@ input {
 }
 
 .form-grid-double {
+    margin-top: 12px;
     grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
@@ -1824,6 +1825,36 @@ input {
     background: rgba(46, 59, 84, 0.88);
     color: #eef4ff;
     font-weight: 700;
+}
+
+.poster-preview {
+    display: grid;
+    gap: 10px;
+    margin-top: 16px;
+    padding: 14px;
+    border-radius: 20px;
+    background: rgba(9, 13, 20, 0.72);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.poster-preview[hidden] {
+    display: none;
+}
+
+.poster-preview img {
+    display: block;
+    width: 100%;
+    max-height: 360px;
+    object-fit: cover;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.poster-preview-name {
+    margin: 0;
+    color: var(--admin-text-muted);
+    font-size: 0.92rem;
+    word-break: break-word;
 }
 
 .select-row {

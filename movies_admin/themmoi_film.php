@@ -78,6 +78,7 @@ $languageSuggestions = array("Tiếng Việt", "Tiếng Anh", "Vietsub", "Lồng
 ?>
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -85,6 +86,7 @@ $languageSuggestions = array("Tiếng Việt", "Tiếng Anh", "Vietsub", "Lồng
     <title>Thêm phim | ITMOVIES Admin</title>
     <link rel="stylesheet" href="style_admin.css">
 </head>
+
 <body>
     <div class="admin-shell">
         <aside class="admin-sidebar">
@@ -136,7 +138,8 @@ $languageSuggestions = array("Tiếng Việt", "Tiếng Anh", "Vietsub", "Lồng
                     <span class="admin-nav-icon">&#9881;</span>
                     <span>Cài đặt</span>
                 </a>
-                <a class="admin-logout" href="logout.php" onclick="return confirm('Bạn có chắc chắn muốn đăng xuất không?')">
+                <a class="admin-logout" href="logout.php"
+                    onclick="return confirm('Bạn có chắc chắn muốn đăng xuất không?')">
                     <span class="admin-nav-icon">&#10162;</span>
                     <span>Đăng xuất</span>
                 </a>
@@ -177,21 +180,21 @@ $languageSuggestions = array("Tiếng Việt", "Tiếng Anh", "Vietsub", "Lồng
             </section>
 
             <?php if (!empty($errors)) { ?>
-                <div class="admin-alert admin-alert-error">
-                    <strong>Không thể lưu phim:</strong>
-                    <ul>
-                        <?php foreach ($errors as $error) { ?>
-                            <li><?php echo admin_escape($error); ?></li>
-                        <?php } ?>
-                    </ul>
-                </div>
+            <div class="admin-alert admin-alert-error">
+                <strong>Không thể lưu phim:</strong>
+                <ul>
+                    <?php foreach ($errors as $error) { ?>
+                    <li><?php echo admin_escape($error); ?></li>
+                    <?php } ?>
+                </ul>
+            </div>
             <?php } ?>
 
             <?php if ($successMessage !== "") { ?>
-                <div class="admin-alert admin-alert-success">
-                    <strong>Thành công:</strong>
-                    <span><?php echo admin_escape($successMessage); ?></span>
-                </div>
+            <div class="admin-alert admin-alert-success">
+                <strong>Thành công:</strong>
+                <span><?php echo admin_escape($successMessage); ?></span>
+            </div>
             <?php } ?>
 
             <form class="add-movie-form" action="xuly_themfilm.php" method="post" enctype="multipart/form-data">
@@ -209,29 +212,36 @@ $languageSuggestions = array("Tiếng Việt", "Tiếng Anh", "Vietsub", "Lồng
                             <div class="form-grid form-grid-single">
                                 <label class="admin-field">
                                     <span>TIÊU ĐỀ PHIM</span>
-                                    <input type="text" name="txthoten" value="<?php echo admin_escape(isset($oldInput["txthoten"]) ? $oldInput["txthoten"] : ""); ?>" placeholder="Nhập tên phim chính xác...">
+                                    <input type="text" name="txthoten"
+                                        value="<?php echo admin_escape(isset($oldInput["txthoten"]) ? $oldInput["txthoten"] : ""); ?>"
+                                        placeholder="Nhập tên phim chính xác...">
                                 </label>
 
                                 <label class="admin-field">
                                     <span>MÔ TẢ NỘI DUNG</span>
-                                    <textarea name="txtmota" rows="7" placeholder="Tóm tắt nội dung phim..."><?php echo admin_escape(isset($oldInput["txtmota"]) ? $oldInput["txtmota"] : ""); ?></textarea>
+                                    <textarea name="txtmota" rows="7"
+                                        placeholder="Tóm tắt nội dung phim..."><?php echo admin_escape(isset($oldInput["txtmota"]) ? $oldInput["txtmota"] : ""); ?></textarea>
                                 </label>
                             </div>
 
                             <div class="form-grid form-grid-double">
                                 <label class="admin-field">
                                     <span>NĂM PHÁT HÀNH</span>
-                                    <input type="number" min="1900" max="<?php echo date("Y"); ?>" name="txtnamphathanh" value="<?php echo admin_escape(isset($oldInput["txtnamphathanh"]) ? $oldInput["txtnamphathanh"] : date("Y")); ?>" placeholder="2024">
+                                    <input type="number" min="1900" max="<?php echo date("Y"); ?>" name="txtnamphathanh"
+                                        value="<?php echo admin_escape(isset($oldInput["txtnamphathanh"]) ? $oldInput["txtnamphathanh"] : date("Y")); ?>"
+                                        placeholder="2024">
                                 </label>
 
                                 <label class="admin-field">
                                     <span>NGÔN NGỮ</span>
-                                    <input type="text" list="language-suggestions" name="txtngonngu" value="<?php echo admin_escape(isset($oldInput["txtngonngu"]) ? $oldInput["txtngonngu"] : "Tiếng Việt"); ?>" placeholder="Tiếng Việt">
+                                    <input type="text" list="language-suggestions" name="txtngonngu"
+                                        value="<?php echo admin_escape(isset($oldInput["txtngonngu"]) ? $oldInput["txtngonngu"] : "Tiếng Việt"); ?>"
+                                        placeholder="Tiếng Việt">
                                 </label>
                             </div>
                             <datalist id="language-suggestions">
                                 <?php foreach ($languageSuggestions as $languageSuggestion) { ?>
-                                    <option value="<?php echo admin_escape($languageSuggestion); ?>"></option>
+                                <option value="<?php echo admin_escape($languageSuggestion); ?>"></option>
                                 <?php } ?>
                             </datalist>
                         </section>
@@ -241,25 +251,32 @@ $languageSuggestions = array("Tiếng Việt", "Tiếng Anh", "Vietsub", "Lồng
                                 <span class="section-icon section-icon-link">&#128279;</span>
                                 <div>
                                     <h2>Nguồn phát Video</h2>
-                                    <p>Server 1 là nguồn bắt buộc để đảm bảo người dùng có thể xem phim ngay sau khi lưu.</p>
+                                    <p>Server 1 là nguồn bắt buộc để đảm bảo người dùng có thể xem phim ngay sau khi
+                                        lưu.</p>
                                 </div>
                             </div>
 
                             <div class="form-grid form-grid-single">
                                 <label class="admin-field">
                                     <span>SERVER 1 (PRIMARY)</span>
-                                    <input type="text" name="txtlink1" value="<?php echo admin_escape(isset($oldInput["txtlink1"]) ? $oldInput["txtlink1"] : ""); ?>" placeholder="Nhập mã video hoặc link nguồn phát chính">
+                                    <input type="text" name="txtlink1"
+                                        value="<?php echo admin_escape(isset($oldInput["txtlink1"]) ? $oldInput["txtlink1"] : ""); ?>"
+                                        placeholder="Nhập mã video hoặc link nguồn phát chính">
                                 </label>
 
                                 <label class="admin-field">
                                     <span>SERVER 2 (BACKUP)</span>
-                                    <input type="text" name="txtlink2" value="<?php echo admin_escape(isset($oldInput["txtlink2"]) ? $oldInput["txtlink2"] : ""); ?>" placeholder="Có thể bỏ trống nếu chưa có server phụ">
+                                    <input type="text" name="txtlink2"
+                                        value="<?php echo admin_escape(isset($oldInput["txtlink2"]) ? $oldInput["txtlink2"] : ""); ?>"
+                                        placeholder="Có thể bỏ trống nếu chưa có server phụ">
                                 </label>
                             </div>
 
                             <div class="add-movie-tip">
                                 <span class="section-icon section-icon-warning">&#9888;</span>
-                                <p>Vui lòng kiểm tra kỹ đường dẫn server trước khi lưu. `xemphim` đang dùng `link1`, còn `reviewphim` sẽ dùng `link2` nếu có, hoặc fallback sang `link1` sau khi được harden.</p>
+                                <p>Vui lòng kiểm tra kỹ đường dẫn server trước khi lưu. `xemphim` đang dùng `link1`, còn
+                                    `reviewphim` sẽ dùng `link2` nếu có, hoặc fallback sang `link1` sau khi được harden.
+                                </p>
                             </div>
                         </section>
                     </div>
@@ -270,17 +287,23 @@ $languageSuggestions = array("Tiếng Việt", "Tiếng Anh", "Vietsub", "Lồng
                                 <span class="section-icon section-icon-red">&#128247;</span>
                                 <div>
                                     <h2>Ảnh Poster</h2>
-                                    <p>Ảnh sẽ được lưu vào thư mục `movies_admin/hinhanhphim/` và DB chỉ lưu filename.</p>
+                                    <p>Ảnh sẽ được lưu vào thư mục `movies_admin/hinhanhphim/` và DB chỉ lưu filename.
+                                    </p>
                                 </div>
                             </div>
 
                             <label class="poster-upload-box">
-                                <input class="poster-upload-input" type="file" name="taptin1" accept=".jpg,.jpeg,.png,.webp">
+                                <input class="poster-upload-input" id="poster-upload-input" type="file" name="taptin1"
+                                    accept=".jpg,.jpeg,.png,.webp">
                                 <span class="poster-upload-icon">&#8682;</span>
                                 <strong>Kéo thả ảnh vào đây</strong>
                                 <small>Hỗ trợ JPG, JPEG, PNG, WEBP, tối đa 5MB</small>
                                 <span class="poster-upload-button">Chọn tập tin</span>
                             </label>
+                            <div class="poster-preview" id="poster-preview" hidden>
+                                <img id="poster-preview-image" src="" alt="Xem trước poster phim">
+                                <p class="poster-preview-name" id="poster-preview-name"></p>
+                            </div>
                         </section>
 
                         <section class="admin-card add-movie-section">
@@ -288,7 +311,8 @@ $languageSuggestions = array("Tiếng Việt", "Tiếng Anh", "Vietsub", "Lồng
                                 <span class="section-icon section-icon-tag">&#127991;</span>
                                 <div>
                                     <h2>Phân loại</h2>
-                                    <p>Chọn thể loại ngay trong cùng phiên để phim có thể xem và gợi ý liên quan ổn định.</p>
+                                    <p>Chọn thể loại ngay trong cùng phiên để phim có thể xem và gợi ý liên quan ổn
+                                        định.</p>
                                 </div>
                             </div>
 
@@ -299,12 +323,14 @@ $languageSuggestions = array("Tiếng Việt", "Tiếng Anh", "Vietsub", "Lồng
                                         <select name="cbb_quocgia">
                                             <option value="0">Chọn quốc gia</option>
                                             <?php foreach ($countries as $country) { ?>
-                                                <option value="<?php echo (int) $country["country_id"]; ?>" <?php echo isset($oldInput["cbb_quocgia"]) && (int) $oldInput["cbb_quocgia"] === (int) $country["country_id"] ? "selected" : ""; ?>>
-                                                    <?php echo admin_escape($country["country_name"]); ?>
-                                                </option>
+                                            <option value="<?php echo (int) $country["country_id"]; ?>"
+                                                <?php echo isset($oldInput["cbb_quocgia"]) && (int) $oldInput["cbb_quocgia"] === (int) $country["country_id"] ? "selected" : ""; ?>>
+                                                <?php echo admin_escape($country["country_name"]); ?>
+                                            </option>
                                             <?php } ?>
                                         </select>
-                                        <a class="inline-manage-link" href="index.php?page_layout=themquocgia">Thêm quốc gia</a>
+                                        <a class="inline-manage-link" href="index.php?page_layout=themquocgia">Thêm quốc
+                                            gia</a>
                                     </div>
                                 </label>
                             </div>
@@ -313,11 +339,14 @@ $languageSuggestions = array("Tiếng Việt", "Tiếng Anh", "Vietsub", "Lồng
                                 <span class="genre-selector-label">THỂ LOẠI PHIM</span>
                                 <div class="genre-selector-grid">
                                     <?php foreach ($genres as $genre) { ?>
-                                        <?php $isChecked = in_array((string) $genre["theloai_id"], $selectedGenres, true) || in_array((int) $genre["theloai_id"], $selectedGenres, true); ?>
-                                        <label class="genre-option">
-                                            <input type="checkbox" name="movie_genres[]" value="<?php echo (int) $genre["theloai_id"]; ?>" <?php echo $isChecked ? "checked" : ""; ?>>
-                                            <span><?php echo admin_escape($genre["ten_theloai"]); ?></span>
-                                        </label>
+                                    <?php $isChecked = in_array((string) $genre["theloai_id"], $selectedGenres, true) || in_array((int) $genre["theloai_id"], $selectedGenres, true); ?>
+                                    <label class="genre-option">
+
+                                        <input type="checkbox" name="movie_genres[]"
+                                            value="<?php echo (int) $genre["theloai_id"]; ?>"
+                                            <?php echo $isChecked ? "checked" : ""; ?>>
+                                        <span><?php echo admin_escape($genre["ten_theloai"]); ?></span>
+                                    </label>
                                     <?php } ?>
                                 </div>
                             </div>
@@ -327,7 +356,8 @@ $languageSuggestions = array("Tiếng Việt", "Tiếng Anh", "Vietsub", "Lồng
                                     <span class="section-icon section-icon-green">&#128065;</span>
                                     <div>
                                         <strong>Hiển thị cho người dùng ngay</strong>
-                                        <p>Sau khi lưu thành công và đã có thể loại, phim sẽ đủ dữ liệu để vào được màn xem chi tiết và xem phim.</p>
+                                        <p>Sau khi lưu thành công và đã có thể loại, phim sẽ đủ dữ liệu để vào được màn
+                                            xem chi tiết và xem phim.</p>
                                     </div>
                                 </div>
                             </div>
@@ -342,5 +372,39 @@ $languageSuggestions = array("Tiếng Việt", "Tiếng Anh", "Vietsub", "Lồng
             </form>
         </main>
     </div>
+    <script>
+    (function() {
+        var input = document.getElementById("poster-upload-input");
+        var preview = document.getElementById("poster-preview");
+        var previewImage = document.getElementById("poster-preview-image");
+        var previewName = document.getElementById("poster-preview-name");
+
+        if (!input || !preview || !previewImage || !previewName) {
+            return;
+        }
+
+        input.addEventListener("change", function(event) {
+            var file = event.target.files && event.target.files[0] ? event.target.files[0] : null;
+
+            if (!file || file.type.indexOf("image/") !== 0) {
+                preview.hidden = true;
+                previewImage.removeAttribute("src");
+                previewName.textContent = "";
+                return;
+            }
+
+            var reader = new FileReader();
+
+            reader.onload = function(loadEvent) {
+                previewImage.src = loadEvent.target.result;
+                previewName.textContent = file.name;
+                preview.hidden = false;
+            };
+
+            reader.readAsDataURL(file);
+        });
+    })();
+    </script>
 </body>
+
 </html>
