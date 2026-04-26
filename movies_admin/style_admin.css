@@ -936,7 +936,7 @@ input {
 }
 
 .admin-search-wide {
-    width: min(100%, 720px);
+    width: min(100%, 670px);
 }
 
 .admin-topbar-actions {
@@ -979,6 +979,7 @@ input {
 
 .movie-page-heading {
     align-items: flex-end;
+    padding: 12px 0 40px;
 }
 
 .movie-page-heading h1 {
@@ -1082,11 +1083,13 @@ input {
 .movie-filter-card::after {
     content: "\2304";
     position: absolute;
-    right: 20px;
-    bottom: 29px;
+    right: 40px;
+    top: 45%;
+    transform: translateY(8px);
     color: #7f8795;
     pointer-events: none;
-    font-size: 1rem;
+    font-size: 1.05rem;
+    line-height: 1;
 }
 
 .movie-filter-status-dot {
@@ -1112,6 +1115,7 @@ input {
 
 .movie-filter-actions {
     justify-content: flex-start;
+    padding: 0 12px 12px 0;
 }
 
 .movie-reset-link {

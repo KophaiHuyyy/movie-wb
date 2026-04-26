@@ -587,8 +587,8 @@ if ($serverStatus === "pending") {
                             <option value="stopped" <?php echo $serverStatus === "stopped" ? "selected" : ""; ?>>Ngừng
                                 chiếu</option>
                         </select>
-                        <span class="movie-filter-status-dot"></span>
-                        <span class="movie-filter-status-text"><?php echo admin_escape($serverSummaryLabel); ?></span>
+                        <!-- <span class="movie-filter-status-dot"></span>
+                        <span class="movie-filter-status-text"><?php echo admin_escape($serverSummaryLabel); ?></span> -->
                     </label>
                 </div>
 
