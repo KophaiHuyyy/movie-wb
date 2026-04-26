@@ -46,19 +46,19 @@
 						}
 						else// admin
 						{
-							header("Location: ../movies_admin/index");
+							header("Location: ../movies_admin/index.php");
 							exit();
 						}
 					} else {
 						// Nếu không có URL chuyển hướng, chuyển hướng đến trang mặc định (ví dụ: index.php)
 						if($_SESSION['role'] ==1)
 						{
-							header("Location: ../movies_admin/index");
+							header("Location: ../movies_admin/index.php");
 							exit();
 						}
 						else
 						{
-							header("Location: ../users/index");
+							header("Location: ../users/index.php");
 							exit();
 						}
 					}

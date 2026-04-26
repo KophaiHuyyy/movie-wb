@@ -45,7 +45,7 @@
     <div class="chitiet">
      <?php
         echo "<h3 style='color: white'>Lượt xem: ".$row['view']."</h3>";
-        echo "<a  href='xemsau?id=$ID&iduser=".$_SESSION['user_id']."'><button class='btnxemphim'type='button'>Lưu Xem Sau</button></a>";
+        echo "<a  href='xemsau.php?id=$ID&iduser=".$_SESSION['user_id']."'><button class='btnxemphim'type='button'>Lưu Xem Sau</button></a>";
         ?>
     </div>
 <h2 class="phimcapnhat">PHIM ĐỀ CỬ CHO BẠN</h2>

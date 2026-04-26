@@ -26,7 +26,7 @@
       }
       while ($row = $ListKH->fetch_array(MYSQLI_ASSOC)) {
         echo "<div class='card'>";
-        echo "<a href='index?page_layout=chitietphim&id=" . $row["movie_id"] . "' class ='card-link'>";
+        echo "<a href='index.php?page_layout=chitietphim&id=" . $row["movie_id"] . "' class ='card-link'>";
         echo "<img class='hinhanhphim' src='../movies_admin/hinhanhphim/" . $row["img"] . "' style='width: 180px; height: 280px;'>";
         echo "<span class='tenphim' >" . $row["title"] . "</span> <br />";
         echo "</a>";
@@ -53,7 +53,7 @@
     }
     while ($rowmoviesNew = $ListMovieNew->fetch_array(MYSQLI_ASSOC)) {
         echo "<div class='card_moivenew'>";
-        echo "<a href='index?page_layout=chitietphim&id=" . $rowmoviesNew["movie_id"] . "' class ='card-link'>";
+        echo "<a href='index.php?page_layout=chitietphim&id=" . $rowmoviesNew["movie_id"] . "' class ='card-link'>";
         echo "<img class='hinhanhphim_new' src='../movies_admin/hinhanhphim/" . $rowmoviesNew["img"] . "' style='width: 140px; height: 180px;'>";
         echo "<span class='tenphim1' >" . $rowmoviesNew["title"] . "</span> <br />";
         echo "</a>";

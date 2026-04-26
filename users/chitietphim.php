@@ -1,142 +1,320 @@
-<!DOCTYPE html>
-<html>
-<head>
 <?php
-    include_once "cauhinh.php";
-    $ID = $_GET['id'];
-    $quey = "select * from movies, genres, movie_genre where movies.movie_id = $ID and movie_genre.movie_id =  movies.movie_id  and movie_genre.theloai_id= genres.theloai_id";
-    $movies = $connect->query($quey);
-    if(!$movies)
-    {
-        die("Unable to execute Sql statement".$connect->connect_error);
-        exit();
-    }
-    $row = $movies->fetch_array(MYSQLI_ASSOC);
-    if($row != null)
-    {
-        echo "<title>".$row['title']." - ".$row['language']." - Full HD - IT Phim</title>";
-    }
-?>
-  <link rel="stylesheet" href="style_detailphim.css">
-</head>
-<body>
-  </header>
-    <div class="chitietphim">
-        <?php
-        $ID = $_GET['id'];
-        $query = "SELECT * 
-        FROM movies
-        INNER JOIN movie_genre ON movies.movie_id = movie_genre.movie_id
-        INNER JOIN genres ON movie_genre.theloai_id = genres.theloai_id
-        WHERE movies.movie_id = $ID";
-        $result = $connect->query($query);
-        $rowmoviedetail = $result->fetch_assoc();
-        if ($rowmoviedetail != null) {
-            echo "<div class='chitietphim-img'>";
-            echo "<img src='../movies_admin/hinhanhphim/" . $rowmoviedetail['img'] . "' alt='Movie Image' style='width: 210px; height: 330px;'>";
-            echo "</div>";
+include_once "cauhinh.php";
 
-            echo "<div class='chitietphim-info'>";
-            echo "<h2 class='chitietphim-title'>" . $rowmoviedetail['title'] . "</h2>";
-            echo "<p class='chitietphim-language'>Ngôn ngữ: " . $rowmoviedetail['language'] . "</p>";
-            $listtheloai = $connect->query("SELECT * FROM movie_genre, genres WHERE movie_genre.movie_id = $ID AND movie_genre.theloai_id = genres.theloai_id");
-            echo "<p class='chitietphim-genre'>Thể loại:</p>";
-            while ($rowtheloai = $listtheloai->fetch_assoc()) {
-                echo "<p class='chitietphim-genre'>- " . $rowtheloai['ten_theloai'] . ".</p>";
-            }
-            $listquocgia = $connect->query("SELECT * FROM movies, country  WHERE movies.movie_id = $ID AND movies.country_id = country.country_id");
-            $rowqg = $listquocgia->fetch_assoc();
-            echo "<p class='chitietphim-genre'>Quốc gia: " . $rowqg['country_name'] . ".</p>";
-            echo "<p class='chitietphim-genre'>Lượt xem: " . $rowqg['view'] . "</p>";
-            echo "<p class='chitietphim-description'>Nội dung phim: " . $rowmoviedetail['description'] . "</p>";
-            echo "<a  href='index.php?page_layout=xemphim&id=" . $rowmoviedetail['movie_id'] . "'><button class='btnxemphim'type='button'>Xem Phim</button></a>";
-            echo "<a  href='index.php?page_layout=reviewphim&id=" . $rowmoviedetail['movie_id'] . "'><button class='btnxemreview'type='button'>Xem Review</button></a>";
-            echo "</div>";
-        }
-        ?>
-    </div>
-<h2 class="phimcapnhat">PHIM ĐỀ CỬ CHO BẠN</h2>
-<section>
-  <div class='left-column'>
-    <?php
-    $itemsPerPage = 10; // Số phim mới cập nhật hiển thị trên mỗi trang
-    $currentPage = isset($_GET['page']) ? $_GET['page'] : 1; // Trang hiện tại, mặc định là trang 1
-    $offset = ($currentPage - 1) * $itemsPerPage; // Vị trí bắt đầu lấy dữ liệu từ CSDL
-    
-    $listIDtheloai = $connect->query("SELECT * 
-    FROM movies
-    INNER JOIN movie_genre ON movies.movie_id = movie_genre.movie_id
-    INNER JOIN genres ON movie_genre.theloai_id = genres.theloai_id
-    where movies.movie_id = $ID
-    ORDER BY `view` DESC
-    ");
-    if (!$listIDtheloai) {
-        die("Unable to execute SQL statement" . $connect->connect_error);
-        exit();
-    }
-    $rowtheloai = $listIDtheloai->fetch_array(MYSQLI_ASSOC);
-    if($rowtheloai != null){
-        $query = "SELECT * 
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+$ID = isset($_GET['id']) ? (int) $_GET['id'] : 0;
+
+$movie = null;
+$genres = array();
+$relatedMovies = array();
+$rankingMovies = array();
+$reviews = array();
+$reviewCount = 0;
+$averageRating = 0;
+
+if ($ID > 0) {
+    $movieResult = $connect->query("
+        SELECT movies.*, country.country_name
         FROM movies
-        INNER JOIN movie_genre ON movies.movie_id = movie_genre.movie_id
+        LEFT JOIN country ON movies.country_id = country.country_id
+        WHERE movies.movie_id = $ID
+        LIMIT 1
+    ");
+
+    if ($movieResult && $movieResult->num_rows > 0) {
+        $movie = $movieResult->fetch_assoc();
+    }
+
+    $genreResult = $connect->query("
+        SELECT genres.*
+        FROM movie_genre
         INNER JOIN genres ON movie_genre.theloai_id = genres.theloai_id
-        WHERE genres.theloai_id = ".$rowtheloai['theloai_id']."
-        and movies.movie_id not like $ID
-        ORDER BY `view` DESC
-        LIMIT $offset, $itemsPerPage";
-        $ListMovieNew = $connect->query($query);
-        if (!$ListMovieNew) {
-            die("Unable to execute SQL statement" . $connect->connect_error);
-            exit();
-        }
-        while ($rowmoviesNew = $ListMovieNew->fetch_array(MYSQLI_ASSOC)) {
-            echo "<div class='card_moivenew'>";
-            echo "<a href='index.php?page_layout=chitietphim&id=" . $rowmoviesNew["movie_id"] . "' class ='card-link'>";
-            echo "<img class='hinhanhphim_new' src='../movies_admin/hinhanhphim/" . $rowmoviesNew["img"] . "' style='width: 140px; height: 180px;'>";
-            echo "<span class='tenphim1' >" . $rowmoviesNew["title"] . "</span> <br />";
-            echo "</a>";
-            echo "</div>";
+        WHERE movie_genre.movie_id = $ID
+        ORDER BY genres.ten_theloai ASC
+    ");
+
+    if ($genreResult) {
+        while ($row = $genreResult->fetch_assoc()) {
+            $genres[] = $row;
         }
     }
+
+    $reviewStats = $connect->query("
+        SELECT COUNT(*) AS total_reviews, AVG(rating) AS average_rating
+        FROM reviews
+        WHERE movie_id = $ID
+    ");
+
+    if ($reviewStats) {
+        $stats = $reviewStats->fetch_assoc();
+        $reviewCount = isset($stats['total_reviews']) ? (int) $stats['total_reviews'] : 0;
+        $averageRating = !empty($stats['average_rating']) ? round((float) $stats['average_rating'], 1) : 0;
+    }
+
+    $reviewResult = $connect->query("
+        SELECT reviews.*, users.fullname
+        FROM reviews
+        LEFT JOIN users ON reviews.user_id = users.user_id
+        WHERE reviews.movie_id = $ID
+        ORDER BY reviews.review_date DESC
+        LIMIT 3
+    ");
+
+    if ($reviewResult) {
+        while ($row = $reviewResult->fetch_assoc()) {
+            $reviews[] = $row;
+        }
+    }
+
+    $firstGenreId = !empty($genres) ? (int) $genres[0]['theloai_id'] : 0;
+    if ($firstGenreId > 0) {
+        $relatedResult = $connect->query("
+            SELECT DISTINCT movies.*
+            FROM movies
+            INNER JOIN movie_genre ON movies.movie_id = movie_genre.movie_id
+            WHERE movie_genre.theloai_id = $firstGenreId
+              AND movies.movie_id <> $ID
+            ORDER BY movies.view DESC, movies.date_add DESC
+            LIMIT 8
+        ");
+    } else {
+        $relatedResult = $connect->query("
+            SELECT *
+            FROM movies
+            WHERE movie_id <> $ID
+            ORDER BY view DESC, date_add DESC
+            LIMIT 8
+        ");
+    }
+
+    if (isset($relatedResult) && $relatedResult) {
+        while ($row = $relatedResult->fetch_assoc()) {
+            $relatedMovies[] = $row;
+        }
+    }
+}
+
+$rankingResult = $connect->query("
+    SELECT *
+    FROM movies
+    ORDER BY view DESC, date_add DESC
+    LIMIT 10
+");
+
+if ($rankingResult) {
+    while ($row = $rankingResult->fetch_assoc()) {
+        $rankingMovies[] = $row;
+    }
+}
+
+if ($movie === null) {
     ?>
-</div>
-  <div class='right-column'>
-    <h2 class="phimsapchieu">PHIM SẮP CHIẾU</h2>
+    <div class="movie-detail-empty">
+      <h1>Khong tim thay phim</h1>
+      <p>Phim co the da bi xoa hoac duong dan khong hop le.</p>
+      <a href="index.php?page_layout=home">Quay ve trang chu</a>
+    </div>
+    <?php
+    return;
+}
+
+$movieId = (int) $movie['movie_id'];
+$title = htmlspecialchars($movie['title']);
+$description = !empty($movie['description']) ? htmlspecialchars($movie['description']) : 'Noi dung dang duoc cap nhat.';
+$shortDescription = htmlspecialchars(mb_substr(strip_tags($movie['description'] ?? ''), 0, 260));
+$image = htmlspecialchars($movie['img']);
+$year = !empty($movie['release_year']) ? htmlspecialchars($movie['release_year']) : 'N/A';
+$language = !empty($movie['language']) ? htmlspecialchars($movie['language']) : 'Dang cap nhat';
+$country = !empty($movie['country_name']) ? htmlspecialchars($movie['country_name']) : 'Dang cap nhat';
+$views = isset($movie['view']) ? (int) $movie['view'] : 0;
+$dateAdd = !empty($movie['date_add']) ? htmlspecialchars($movie['date_add']) : 'Dang cap nhat';
+$watchLaterUrl = isset($_SESSION['user_id'])
+    ? 'index.php?page_layout=xemsau&id=' . $movieId . '&iduser=' . (int) $_SESSION['user_id']
+    : 'login.php';
+$displayRating = $averageRating > 0 ? $averageRating : ($views > 0 ? min(9, max(5, $views + 4)) : 6);
+?>
+
+<section class="movie-detail-page">
+  <div class="detail-hero">
+    <div class="detail-hero-bg">
+      <img src="../movies_admin/hinhanhphim/<?php echo $image; ?>" alt="<?php echo $title; ?>">
+    </div>
+    <div class="detail-hero-shade"></div>
+  </div>
+
+  <div class="detail-layout">
+    <aside class="detail-sidebar">
+      <div class="detail-poster-card">
+        <img src="../movies_admin/hinhanhphim/<?php echo $image; ?>" alt="<?php echo $title; ?>">
+      </div>
+
+      <h1><?php echo $title; ?></h1>
+      <p class="detail-original-title"><?php echo $language; ?></p>
+
+      <div class="detail-badges">
+        <span>IMDb <?php echo $displayRating; ?></span>
+        <span><?php echo $year; ?></span>
+        <span>FHD</span>
+        <span>Full</span>
+      </div>
+
+      <a class="detail-season-pill" href="index.php?page_layout=xemphim&id=<?php echo $movieId; ?>">Full / 2 tap</a>
+
+      <div class="detail-info-block">
+        <h2>Gioi thieu</h2>
+        <p><?php echo $description; ?></p>
+      </div>
+
+      <dl class="detail-meta-list">
+        <div>
+          <dt>Thoi luong</dt>
+          <dd>24 phut/tap</dd>
+        </div>
+        <div>
+          <dt>Nam</dt>
+          <dd><?php echo $year; ?></dd>
+        </div>
+        <div>
+          <dt>Quoc gia</dt>
+          <dd><?php echo $country; ?></dd>
+        </div>
+        <div>
+          <dt>Luot xem</dt>
+          <dd><?php echo $views; ?></dd>
+        </div>
+        <div>
+          <dt>Ngay cap nhat</dt>
+          <dd><?php echo $dateAdd; ?></dd>
+        </div>
+      </dl>
+
+      <div class="weekly-ranking">
+        <h2>Top phim tuan nay</h2>
+        <?php foreach ($rankingMovies as $index => $rankingMovie) { ?>
+          <a class="weekly-item" href="index.php?page_layout=chitietphim&id=<?php echo (int) $rankingMovie['movie_id']; ?>">
+            <span class="weekly-number"><?php echo $index + 1; ?></span>
+            <img src="../movies_admin/hinhanhphim/<?php echo htmlspecialchars($rankingMovie['img']); ?>" alt="<?php echo htmlspecialchars($rankingMovie['title']); ?>">
+            <span>
+              <strong><?php echo htmlspecialchars($rankingMovie['title']); ?></strong>
+              <small>HD • <?php echo !empty($rankingMovie['release_year']) ? htmlspecialchars($rankingMovie['release_year']) : 'Full'; ?></small>
+            </span>
+          </a>
+        <?php } ?>
+      </div>
+    </aside>
+
+    <main class="detail-main">
+      <div class="detail-action-bar">
+        <a class="detail-play-btn" href="index.php?page_layout=xemphim&id=<?php echo $movieId; ?>">▶ Xem ngay</a>
+        <a class="detail-action" href="<?php echo $watchLaterUrl; ?>">♥ Yeu thich</a>
+        <a class="detail-action" href="<?php echo $watchLaterUrl; ?>">+ Them vao</a>
+        <a class="detail-action" href="index.php?page_layout=reviewphim&id=<?php echo $movieId; ?>">↗ Chia se</a>
+        <a class="detail-action" href="#detail-comments">Binh luan</a>
+        <span class="detail-score"><?php echo $reviewCount; ?> danh gia</span>
+      </div>
+
+      <div class="detail-domain-strip">Truy cap ro bang ten mien <strong>ITmovie.local</strong></div>
+
+      <nav class="detail-tabs" aria-label="Thong tin phim">
+        <a class="active" href="#episodes">Tap phim</a>
+        <a href="#gallery">Gallery</a>
+        <a href="#ost">OST</a>
+        <a href="#casts">Dien vien</a>
+        <a href="#related">De xuat</a>
+      </nav>
+
+      <section class="episode-panel" id="episodes">
+        <div class="episode-head">
+          <h2>☰ Phan 1</h2>
+          <label><span>Rut gon</span><input type="checkbox" checked></label>
+        </div>
+        <div class="episode-tabs">
+          <button type="button" class="active">Nguon 1</button>
+          <button type="button">Nguon 2</button>
+          <button type="button">Nguon 3</button>
+        </div>
+        <div class="episode-list">
+          <a href="index.php?page_layout=xemphim&id=<?php echo $movieId; ?>">▶ Tap 1</a>
+          <a href="index.php?page_layout=reviewphim&id=<?php echo $movieId; ?>">▶ Tap 2</a>
+        </div>
+      </section>
+
+      <section class="detail-section" id="gallery">
+        <div class="detail-section-head">
+          <span>Gallery</span>
+          <h2>Anh va thong tin nhanh</h2>
+        </div>
+        <div class="detail-gallery-grid">
+          <div>
+            <img src="../movies_admin/hinhanhphim/<?php echo $image; ?>" alt="<?php echo $title; ?>">
+          </div>
+          <div class="detail-summary-card">
+            <h3><?php echo $title; ?></h3>
+            <p><?php echo $shortDescription; ?>...</p>
+            <div class="detail-genre-list">
+              <?php foreach ($genres as $genre) { ?>
+                <a href="index.php?page_layout=theloai&id=<?php echo (int) $genre['theloai_id']; ?>">
+                  <?php echo htmlspecialchars($genre['ten_theloai']); ?>
+                </a>
+              <?php } ?>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="detail-comments" id="detail-comments">
+        <div class="comment-title">
+          <h2>💬 Binh luan (<?php echo $reviewCount; ?>)</h2>
+          <div>
+            <button type="button" class="active">Binh luan</button>
+            <button type="button">Danh gia</button>
+          </div>
+        </div>
+        <p class="comment-login-note">Vui long <a href="login.php">dang nhap</a> de tham gia binh luan.</p>
+        <div class="comment-box">
+          <textarea maxlength="1000" placeholder="Viet binh luan"></textarea>
+          <div>
+            <span>0 / 1000</span>
+            <button type="button">Gui ➜</button>
+          </div>
+        </div>
+
+        <div class="comment-list">
+          <?php if (empty($reviews)) { ?>
+            <div class="empty-comments">
+              <span>▱</span>
+              <p>Chua co binh luan nao</p>
+            </div>
+          <?php } else { ?>
+            <?php foreach ($reviews as $review) { ?>
+              <article class="review-item">
+                <strong><?php echo htmlspecialchars($review['fullname'] ?? 'Nguoi dung'); ?></strong>
+                <span><?php echo (int) $review['rating']; ?>/10</span>
+                <p><?php echo htmlspecialchars($review['comment']); ?></p>
+              </article>
+            <?php } ?>
+          <?php } ?>
+        </div>
+      </section>
+
+      <section class="detail-section" id="related">
+        <div class="detail-section-head">
+          <span>De xuat</span>
+          <h2>Co the ban cung thich</h2>
+        </div>
+        <div class="detail-related-grid">
+          <?php foreach ($relatedMovies as $relatedMovie) { ?>
+            <a class="related-card" href="index.php?page_layout=chitietphim&id=<?php echo (int) $relatedMovie['movie_id']; ?>">
+              <img src="../movies_admin/hinhanhphim/<?php echo htmlspecialchars($relatedMovie['img']); ?>" alt="<?php echo htmlspecialchars($relatedMovie['title']); ?>">
+              <strong><?php echo htmlspecialchars($relatedMovie['title']); ?></strong>
+              <span><?php echo (int) $relatedMovie['view']; ?> luot xem</span>
+            </a>
+          <?php } ?>
+        </div>
+      </section>
+    </main>
   </div>
 </section>
-
-<div class='pagination'>
-    <?php
-    // Phân trang
-    $queryCount = "SELECT COUNT(*) as total
-    FROM movies
-    INNER JOIN movie_genre ON movies.movie_id = movie_genre.movie_id
-    INNER JOIN genres ON movie_genre.theloai_id = genres.theloai_id
-    WHERE movies.movie_id not like $ID  and genres.theloai_id = ".$rowtheloai['theloai_id']."
-    ORDER BY `view` DESC";
-    $result = $connect->query($queryCount);
-    $row = $result->fetch_assoc();
-    $totalItems = $row['total']; // Tổng số phim
-    $totalPages = ceil($totalItems / $itemsPerPage); // Tổng số trang
-    $currentPage = isset($_GET['page']) ? $_GET['page'] : 1; // Trang hiện tại, mặc định là trang 1
-    // Hiển thị nút "Lùi" nếu trang hiện tại không phải là trang đầu tiên
-    if ($currentPage > 1) {
-        echo "<a href='?page_layout=chitietphim&id=$ID&page=". ($currentPage - 1) . "'><img src='anhnen/previous.png' alt='Back' style='width: 20px; height: 20px;'></a> ";
-    }
-    // Hiển thị các trang
-    for ($i = 1; $i <= $totalPages; $i++) {
-        // Hiển thị chỉ một phần các trang nếu có nhiều hơn 5 trang
-        if ($totalPages > 5 && abs($i - $currentPage) > 2) {
-            continue;
-        }
-        echo "<a href='?page_layout=chitietphim&id=$ID&page=" . $i . "'>" . $i . "</a> ";
-    }
-
-    // Hiển thị nút "Tiến" nếu trang hiện tại không phải là trang cuối cùng
-    if ($currentPage < $totalPages) {
-        echo "<a href='?page_layout=chitietphim&id=$ID&page=".($currentPage + 1) ."'><img src='anhnen/next.png' alt='Next' style='width: 20px; height: 20px;'></a> ";
-    }
-    ?>
-</div>
-</body>
-</html>

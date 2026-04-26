@@ -195,7 +195,7 @@ tr{
                                 $servername ="localhost";
                                 $username ="root";
                                 $password ="";
-                                $dbname ="movefilm";
+                                $dbname ="review";
                                 // Connect database
                                 $conn = new mysqli($servername, $username, $password, $dbname);
                                 if($conn->connect_errno)
