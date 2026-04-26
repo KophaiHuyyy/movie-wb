@@ -413,6 +413,7 @@ if ($serverStatus === "pending") {
 ?>
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -420,6 +421,7 @@ if ($serverStatus === "pending") {
     <title>Quản lý phim | ITMOVIES Admin</title>
     <link rel="stylesheet" href="style_admin.css">
 </head>
+
 <body>
     <div class="admin-shell">
         <aside class="admin-sidebar">
@@ -471,23 +473,30 @@ if ($serverStatus === "pending") {
                     <span class="admin-nav-icon">&#9881;</span>
                     <span>Cài đặt</span>
                 </a>
-                <a class="admin-logout" href="logout.php" onclick="return confirm('Bạn có chắc chắn muốn đăng xuất không?')">
+                <a class="admin-logout" href="logout.php"
+                    onclick="return confirm('Bạn có chắc chắn muốn đăng xuất không?')">
                     <span class="admin-nav-icon">&#10162;</span>
                     <span>Đăng xuất</span>
                 </a>
             </div>
         </aside>
 
-        <main class="admin-main movie-page">
+        <main class="admin-main 
+        -page">
             <header class="admin-topbar">
                 <form class="admin-search admin-search-wide" action="index.php" method="get">
                     <input type="hidden" name="page_layout" value="listfilm">
-                    <?php if ($countryId > 0) { ?><input type="hidden" name="country_id" value="<?php echo (int) $countryId; ?>"><?php } ?>
-                    <?php if ($genreId > 0) { ?><input type="hidden" name="genre_id" value="<?php echo (int) $genreId; ?>"><?php } ?>
-                    <?php if ($releaseYear > 0) { ?><input type="hidden" name="release_year" value="<?php echo (int) $releaseYear; ?>"><?php } ?>
-                    <?php if ($serverStatus !== "all") { ?><input type="hidden" name="server_status" value="<?php echo admin_escape($serverStatus); ?>"><?php } ?>
+                    <?php if ($countryId > 0) { ?><input type="hidden" name="country_id"
+                        value="<?php echo (int) $countryId; ?>"><?php } ?>
+                    <?php if ($genreId > 0) { ?><input type="hidden" name="genre_id"
+                        value="<?php echo (int) $genreId; ?>"><?php } ?>
+                    <?php if ($releaseYear > 0) { ?><input type="hidden" name="release_year"
+                        value="<?php echo (int) $releaseYear; ?>"><?php } ?>
+                    <?php if ($serverStatus !== "all") { ?><input type="hidden" name="server_status"
+                        value="<?php echo admin_escape($serverStatus); ?>"><?php } ?>
                     <span class="admin-search-icon">&#9906;</span>
-                    <input type="search" name="search" value="<?php echo admin_escape($searchTerm); ?>" placeholder="Tìm kiếm phim, diễn viên, đạo diễn...">
+                    <input type="search" name="search" value="<?php echo admin_escape($searchTerm); ?>"
+                        placeholder="Tìm kiếm phim, diễn viên, đạo diễn...">
                 </form>
 
                 <div class="admin-topbar-actions">
@@ -514,7 +523,9 @@ if ($serverStatus === "pending") {
                 </div>
 
                 <div class="movie-heading-actions">
-                    <a class="admin-secondary-btn" href="index.php?<?php echo admin_escape(http_build_query(array_merge($pageQuery, array("page_layout" => "listfilm", "export" => 1)))); ?>">Xuất báo cáo</a>
+                    <a class="admin-secondary-btn"
+                        href="index.php?<?php echo admin_escape(http_build_query(array_merge($pageQuery, array("page_layout" => "listfilm", "export" => 1)))); ?>">Xuất
+                        báo cáo</a>
                     <a class="admin-primary-btn" href="index.php?page_layout=themmoi_film">Thêm phim mới</a>
                 </div>
             </section>
@@ -529,9 +540,10 @@ if ($serverStatus === "pending") {
                         <select name="country_id">
                             <option value="0">Tất cả quốc gia</option>
                             <?php foreach ($countries as $country) { ?>
-                                <option value="<?php echo (int) $country["country_id"]; ?>" <?php echo $countryId === (int) $country["country_id"] ? "selected" : ""; ?>>
-                                    <?php echo admin_escape($country["country_name"]); ?>
-                                </option>
+                            <option value="<?php echo (int) $country["country_id"]; ?>"
+                                <?php echo $countryId === (int) $country["country_id"] ? "selected" : ""; ?>>
+                                <?php echo admin_escape($country["country_name"]); ?>
+                            </option>
                             <?php } ?>
                         </select>
                     </label>
@@ -541,9 +553,10 @@ if ($serverStatus === "pending") {
                         <select name="genre_id">
                             <option value="0">Tất cả thể loại</option>
                             <?php foreach ($genres as $genre) { ?>
-                                <option value="<?php echo (int) $genre["theloai_id"]; ?>" <?php echo $genreId === (int) $genre["theloai_id"] ? "selected" : ""; ?>>
-                                    <?php echo admin_escape($genre["ten_theloai"]); ?>
-                                </option>
+                            <option value="<?php echo (int) $genre["theloai_id"]; ?>"
+                                <?php echo $genreId === (int) $genre["theloai_id"] ? "selected" : ""; ?>>
+                                <?php echo admin_escape($genre["ten_theloai"]); ?>
+                            </option>
                             <?php } ?>
                         </select>
                     </label>
@@ -553,10 +566,11 @@ if ($serverStatus === "pending") {
                         <select name="release_year">
                             <option value="0">Tất cả các năm</option>
                             <?php foreach ($years as $year) { ?>
-                                <?php $yearValue = (int) $year["release_year"]; ?>
-                                <option value="<?php echo $yearValue; ?>" <?php echo $releaseYear === $yearValue ? "selected" : ""; ?>>
-                                    <?php echo admin_escape($yearValue); ?>
-                                </option>
+                            <?php $yearValue = (int) $year["release_year"]; ?>
+                            <option value="<?php echo $yearValue; ?>"
+                                <?php echo $releaseYear === $yearValue ? "selected" : ""; ?>>
+                                <?php echo admin_escape($yearValue); ?>
+                            </option>
                             <?php } ?>
                         </select>
                     </label>
@@ -564,10 +578,14 @@ if ($serverStatus === "pending") {
                     <label class="movie-filter-card">
                         <span class="movie-filter-label">TRẠNG THÁI SERVER</span>
                         <select name="server_status">
-                            <option value="all" <?php echo $serverStatus === "all" ? "selected" : ""; ?>>Tất cả trạng thái</option>
-                            <option value="active" <?php echo $serverStatus === "active" ? "selected" : ""; ?>>Đang chiếu (<?php echo admin_escape(admin_format_number($activeMovieTotal)); ?>)</option>
-                            <option value="pending" <?php echo $serverStatus === "pending" ? "selected" : ""; ?>>Chờ duyệt</option>
-                            <option value="stopped" <?php echo $serverStatus === "stopped" ? "selected" : ""; ?>>Ngừng chiếu</option>
+                            <option value="all" <?php echo $serverStatus === "all" ? "selected" : ""; ?>>Tất cả trạng
+                                thái</option>
+                            <option value="active" <?php echo $serverStatus === "active" ? "selected" : ""; ?>>Đang
+                                chiếu (<?php echo admin_escape(admin_format_number($activeMovieTotal)); ?>)</option>
+                            <option value="pending" <?php echo $serverStatus === "pending" ? "selected" : ""; ?>>Chờ
+                                duyệt</option>
+                            <option value="stopped" <?php echo $serverStatus === "stopped" ? "selected" : ""; ?>>Ngừng
+                                chiếu</option>
                         </select>
                         <span class="movie-filter-status-dot"></span>
                         <span class="movie-filter-status-text"><?php echo admin_escape($serverSummaryLabel); ?></span>
@@ -600,77 +618,95 @@ if ($serverStatus === "pending") {
                         </thead>
                         <tbody>
                             <?php if (empty($movies)) { ?>
-                                <tr>
-                                    <td colspan="9">
-                                        <div class="admin-empty-state">Không tìm thấy phim phù hợp với bộ lọc hiện tại.</div>
-                                    </td>
-                                </tr>
+                            <tr>
+                                <td colspan="9">
+                                    <div class="admin-empty-state">Không tìm thấy phim phù hợp với bộ lọc hiện tại.
+                                    </div>
+                                </td>
+                            </tr>
                             <?php } else { ?>
-                                <?php foreach ($movies as $movie) { ?>
-                                    <?php
+                            <?php foreach ($movies as $movie) { ?>
+                            <?php
                                     $posterPath = admin_movie_poster(isset($movie["img"]) ? $movie["img"] : "");
                                     $statusMeta = admin_movie_status_meta($movie);
                                     $genreList = !empty($movie["genre_names"]) ? explode("||", $movie["genre_names"]) : array();
                                     ?>
-                                    <tr>
-                                        <td class="movie-table-checkbox">
-                                            <input type="checkbox" aria-label="Chọn phim <?php echo admin_escape($movie["title"]); ?>">
-                                        </td>
-                                        <td>
-                                            <div class="movie-cell-title">
-                                                <div class="movie-poster">
-                                                    <?php if ($posterPath !== "") { ?>
-                                                        <img src="<?php echo admin_escape($posterPath); ?>" alt="<?php echo admin_escape($movie["title"]); ?>">
-                                                    <?php } else { ?>
-                                                        <div class="movie-poster-fallback"><?php echo admin_escape(admin_initials($movie["title"])); ?></div>
-                                                    <?php } ?>
-                                                </div>
-                                                <div class="movie-title-copy">
-                                                    <h3><?php echo admin_escape($movie["title"]); ?></h3>
-                                                    <span>ID: MOV-<?php echo (int) $movie["movie_id"]; ?></span>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td><?php echo admin_escape($movie["release_year"] !== null ? $movie["release_year"] : "N/A"); ?></td>
-                                        <td><?php echo admin_escape(!empty($movie["language"]) ? $movie["language"] : "Đang cập nhật"); ?></td>
-                                        <td><?php echo admin_escape($movie["country_name"]); ?></td>
-                                        <td>
-                                            <span class="status-badge <?php echo admin_escape($statusMeta["class"]); ?>">
-                                                <span class="status-badge-dot"></span>
-                                                <?php echo admin_escape($statusMeta["label"]); ?>
-                                            </span>
-                                        </td>
-                                        <td><?php echo admin_escape(admin_format_number($movie["total_views"])); ?></td>
-                                        <td>
-                                            <div class="genre-chip-list">
-                                                <?php if (empty($genreList)) { ?>
-                                                    <span class="genre-chip genre-chip-muted">Chưa gán</span>
-                                                <?php } else { ?>
-                                                    <?php foreach ($genreList as $genreName) { ?>
-                                                        <span class="genre-chip"><?php echo admin_escape($genreName); ?></span>
-                                                    <?php } ?>
-                                                <?php } ?>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="movie-actions">
-                                                <a class="action-button" href="../users/index.php?page_layout=chitietphim&id=<?php echo (int) $movie["movie_id"]; ?>" target="_blank" title="Xem chi tiết">&#128065;</a>
-                                                <a class="action-button" href="index.php?page_layout=capnhatfilm&id=<?php echo (int) $movie["movie_id"]; ?>" title="Sửa">&#9998;</a>
-                                                <a class="action-button action-button-danger" href="index.php?page_layout=xuly_xoafilm&id=<?php echo (int) $movie["movie_id"]; ?>" onclick="return confirm('Bạn có chắc chắn muốn xóa phim không?')" title="Xóa">&#128465;</a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                <?php } ?>
+                            <tr>
+                                <td class="movie-table-checkbox">
+                                    <input type="checkbox"
+                                        aria-label="Chọn phim <?php echo admin_escape($movie["title"]); ?>">
+                                </td>
+                                <td>
+                                    <div class="movie-cell-title">
+                                        <div class="movie-poster">
+                                            <?php if ($posterPath !== "") { ?>
+                                            <img src="<?php echo admin_escape($posterPath); ?>"
+                                                alt="<?php echo admin_escape($movie["title"]); ?>">
+                                            <?php } else { ?>
+                                            <div class="movie-poster-fallback">
+                                                <?php echo admin_escape(admin_initials($movie["title"])); ?></div>
+                                            <?php } ?>
+                                        </div>
+                                        <div class="movie-title-copy">
+                                            <h3><?php echo admin_escape($movie["title"]); ?></h3>
+                                            <span>ID: MOV-<?php echo (int) $movie["movie_id"]; ?></span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td><?php echo admin_escape($movie["release_year"] !== null ? $movie["release_year"] : "N/A"); ?>
+                                </td>
+                                <td><?php echo admin_escape(!empty($movie["language"]) ? $movie["language"] : "Đang cập nhật"); ?>
+                                </td>
+                                <td><?php echo admin_escape($movie["country_name"]); ?></td>
+                                <td>
+                                    <span class="status-badge <?php echo admin_escape($statusMeta["class"]); ?>">
+                                        <span class="status-badge-dot"></span>
+                                        <?php echo admin_escape($statusMeta["label"]); ?>
+                                    </span>
+                                </td>
+                                <td><?php echo admin_escape(admin_format_number($movie["total_views"])); ?></td>
+                                <td>
+                                    <div class="genre-chip-list">
+                                        <?php if (empty($genreList)) { ?>
+                                        <span class="genre-chip genre-chip-muted">Chưa gán</span>
+                                        <?php } else { ?>
+                                        <?php foreach ($genreList as $genreName) { ?>
+                                        <span class="genre-chip"><?php echo admin_escape($genreName); ?></span>
+                                        <?php } ?>
+                                        <?php } ?>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="movie-actions">
+                                        <a class="action-button"
+                                            href="../users/index.php?page_layout=chitietphim&id=<?php echo (int) $movie["movie_id"]; ?>"
+                                            target="_blank" title="Xem chi tiết">&#128065;</a>
+                                        <a class="action-button"
+                                            href="index.php?page_layout=capnhatfilm&id=<?php echo (int) $movie["movie_id"]; ?>"
+                                            title="Sửa">&#9998;</a>
+                                        <a class="action-button action-button-danger"
+                                            href="index.php?page_layout=xuly_xoafilm&id=<?php echo (int) $movie["movie_id"]; ?>"
+                                            onclick="return confirm('Bạn có chắc chắn muốn xóa phim không?')"
+                                            title="Xóa">&#128465;</a>
+                                    </div>
+                                </td>
+                            </tr>
+                            <?php } ?>
                             <?php } ?>
                         </tbody>
                     </table>
                 </div>
 
                 <div class="movie-table-footer">
-                    <p>Hiển thị <strong><?php echo admin_escape($displayFrom); ?>-<?php echo admin_escape($displayTo); ?></strong> trên tổng số <strong><?php echo admin_escape(admin_format_number($totalMovies)); ?></strong> phim</p>
+                    <p>Hiển thị
+                        <strong><?php echo admin_escape($displayFrom); ?>-<?php echo admin_escape($displayTo); ?></strong>
+                        trên tổng số <strong><?php echo admin_escape(admin_format_number($totalMovies)); ?></strong>
+                        phim
+                    </p>
 
                     <nav class="pagination" aria-label="Phân trang phim">
-                        <a class="pagination-button <?php echo $pageNumber <= 1 ? "is-disabled" : ""; ?>" href="<?php echo $pageNumber <= 1 ? "#" : admin_escape(admin_build_page_url($pageNumber - 1, $pageQuery)); ?>">&lsaquo;</a>
+                        <a class="pagination-button <?php echo $pageNumber <= 1 ? "is-disabled" : ""; ?>"
+                            href="<?php echo $pageNumber <= 1 ? "#" : admin_escape(admin_build_page_url($pageNumber - 1, $pageQuery)); ?>">&lsaquo;</a>
                         <?php
                         $pageStart = max(1, $pageNumber - 1);
                         $pageEnd = min($totalPages, $pageNumber + 1);
@@ -694,7 +730,8 @@ if ($serverStatus === "pending") {
                             echo '<a class="pagination-button" href="' . admin_escape(admin_build_page_url($totalPages, $pageQuery)) . '">' . admin_escape($totalPages) . '</a>';
                         }
                         ?>
-                        <a class="pagination-button <?php echo $pageNumber >= $totalPages ? "is-disabled" : ""; ?>" href="<?php echo $pageNumber >= $totalPages ? "#" : admin_escape(admin_build_page_url($pageNumber + 1, $pageQuery)); ?>">&rsaquo;</a>
+                        <a class="pagination-button <?php echo $pageNumber >= $totalPages ? "is-disabled" : ""; ?>"
+                            href="<?php echo $pageNumber >= $totalPages ? "#" : admin_escape(admin_build_page_url($pageNumber + 1, $pageQuery)); ?>">&rsaquo;</a>
                     </nav>
                 </div>
             </section>
@@ -728,4 +765,5 @@ if ($serverStatus === "pending") {
         </main>
     </div>
 </body>
+
 </html>
