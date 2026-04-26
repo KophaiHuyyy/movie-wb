@@ -2,6 +2,10 @@
 include_once "checkpermission.php";
 include_once "cauhinh.php";
 
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
 if (!function_exists("admin_escape")) {
     function admin_escape($value)
     {
@@ -223,6 +227,8 @@ if (!function_exists("admin_movie_status_meta")) {
 }
 
 $adminName = !empty($_SESSION["fullname"]) ? $_SESSION["fullname"] : (!empty($_SESSION["username"]) ? $_SESSION["username"] : "Admin");
+$successMessage = isset($_SESSION["admin_add_movie_success"]) ? $_SESSION["admin_add_movie_success"] : "";
+unset($_SESSION["admin_add_movie_success"]);
 
 $countries = admin_fetch_rows($connect, "SELECT country_id, country_name FROM country ORDER BY country_name ASC");
 $genres = admin_fetch_rows($connect, "SELECT theloai_id, ten_theloai FROM genres ORDER BY ten_theloai ASC");
@@ -529,6 +535,13 @@ if ($serverStatus === "pending") {
                     <a class="admin-primary-btn" href="index.php?page_layout=themmoi_film">Thêm phim mới</a>
                 </div>
             </section>
+
+            <?php if ($successMessage !== "") { ?>
+                <div class="admin-alert admin-alert-success">
+                    <strong>Thành công:</strong>
+                    <span><?php echo admin_escape($successMessage); ?></span>
+                </div>
+            <?php } ?>
 
             <form class="movie-filter-form" action="index.php" method="get">
                 <input type="hidden" name="page_layout" value="listfilm">
