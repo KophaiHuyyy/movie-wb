@@ -370,6 +370,33 @@ A larger cleanup could move toward:
 
 Do not do all of this at once unless the task explicitly asks for a broad refactor.
 
+## Installed Codex skill
+### Impeccable
+The Codex skill `impeccable` has been installed globally for frontend/UI work.
+
+Use it when the task is about:
+- redesigning or polishing frontend pages/components
+- critiquing UX or visual hierarchy
+- improving typography, spacing, layout, color, motion, responsiveness, or UX copy
+- auditing bland or inconsistent UI in files such as `users/style_users.css`, `users/stylehome.css`, `users/style_detailphim.css`, `users/index.php`, `users/home.php`, and `users/chitietphim.php`
+
+Invocation pattern:
+- `/impeccable`
+- `/impeccable audit <target>`
+- `/impeccable critique <target>`
+- `/impeccable polish <target>`
+- `/impeccable layout <target>`
+- `/impeccable typeset <target>`
+- `/impeccable colorize <target>`
+- `/impeccable adapt <target>`
+
+Important usage notes:
+- restart Codex after installation so the skill is loaded
+- best results require `PRODUCT.md` at project root
+- `DESIGN.md` is optional but strongly recommended for more on-brand output
+- for this repo, use `impeccable` as a design aid while still preserving existing PHP routing, form field names, session keys, and established page flow unless the task explicitly asks for a broader redesign
+- when applying `impeccable` suggestions here, keep compatibility with the current homepage/detail/auth visual systems already documented above
+
 ## Output expectations for code tasks
 When completing a task in this repo, the agent should report:
 1. what changed
