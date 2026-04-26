@@ -1013,7 +1013,8 @@ input {
 .movie-filter-card {
     position: relative;
     display: grid;
-    gap: 16px;
+    gap: 14px;
+    min-height: 118px;
     padding: 18px 20px;
     border-radius: var(--admin-radius-lg);
     border: 1px solid var(--admin-border);
@@ -1021,6 +1022,22 @@ input {
         linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01)),
         rgba(30, 37, 52, 0.55);
     box-shadow: var(--admin-shadow);
+    transition: border-color 0.2s ease, background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.movie-filter-card:hover {
+    border-color: rgba(255, 255, 255, 0.18);
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.032), rgba(255, 255, 255, 0.012)),
+        rgba(34, 42, 59, 0.72);
+    transform: translateY(-1px);
+}
+
+.movie-filter-card:focus-within {
+    border-color: rgba(229, 9, 20, 0.28);
+    box-shadow:
+        0 24px 50px rgba(0, 0, 0, 0.28),
+        0 0 0 1px rgba(229, 9, 20, 0.16);
 }
 
 .movie-filter-label {
@@ -1032,29 +1049,50 @@ input {
 
 .movie-filter-card select {
     width: 100%;
-    padding: 0 34px 0 0;
-    border: 0;
-    background: transparent;
+    min-height: 46px;
+    margin-top: auto;
+    padding: 10px 38px 10px 14px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 14px;
+    background: rgba(8, 12, 18, 0.28);
     color: var(--admin-text);
     font-size: 1.02rem;
+    font-weight: 600;
+    line-height: 1.2;
     appearance: none;
     outline: none;
     cursor: pointer;
+    transition: border-color 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+}
+
+.movie-filter-card select:hover {
+    background: rgba(10, 14, 22, 0.38);
+}
+
+.movie-filter-card select:focus {
+    border-color: rgba(229, 9, 20, 0.22);
+    background: rgba(14, 18, 27, 0.46);
+}
+
+.movie-filter-card select option {
+    color: #f7e7e2;
+    background: #1d2633;
 }
 
 .movie-filter-card::after {
     content: "\2304";
     position: absolute;
     right: 20px;
-    bottom: 22px;
+    bottom: 29px;
     color: #7f8795;
     pointer-events: none;
+    font-size: 1rem;
 }
 
 .movie-filter-status-dot {
     position: absolute;
-    left: 20px;
-    bottom: 25px;
+    left: 34px;
+    bottom: 37px;
     width: 9px;
     height: 9px;
     border-radius: 50%;
@@ -1064,10 +1102,12 @@ input {
 
 .movie-filter-status-text {
     position: absolute;
-    left: 38px;
-    bottom: 18px;
+    left: 52px;
+    bottom: 28px;
     color: var(--admin-text-muted);
-    font-size: 0.88rem;
+    font-size: 0.84rem;
+    font-weight: 600;
+    pointer-events: none;
 }
 
 .movie-filter-actions {
