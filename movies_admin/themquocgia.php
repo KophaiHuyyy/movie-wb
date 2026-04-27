@@ -395,10 +395,6 @@ $displayEnd = $totalCountries > 0 ? min($totalCountries, $offset + count($countr
                     <span class="admin-nav-icon">&#9673;</span>
                     <span>Thể loại</span>
                 </a>
-                <a class="admin-nav-item" href="index.php?page_layout=list_user">
-                    <span class="admin-nav-icon">&#128101;</span>
-                    <span>Người dùng</span>
-                </a>
                 <a class="admin-nav-item" href="index.php?page_layout=list_theloai_phim">
                     <span class="admin-nav-icon">&#8644;</span>
                     <span>Mapping</span>
@@ -406,6 +402,10 @@ $displayEnd = $totalCountries > 0 ? min($totalCountries, $offset + count($countr
                 <a class="admin-nav-item is-active has-indicator" href="index.php?page_layout=themquocgia">
                     <span class="admin-nav-icon">&#127760;</span>
                     <span>Quốc gia</span>
+                </a>
+                <a class="admin-nav-item" href="index.php?page_layout=list_user">
+                    <span class="admin-nav-icon">&#128101;</span>
+                    <span>Người dùng</span>
                 </a>
                 <a class="admin-nav-item" href="index.php#latest-reviews">
                     <span class="admin-nav-icon">&#9733;</span>
