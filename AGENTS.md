@@ -132,6 +132,21 @@ Admin features include:
 - user management
 - country management
 
+### Current admin genre UI
+The admin genre management screen has been redesigned around:
+- `movies_admin/list_theloai.php`: main dark admin genre page with sidebar, search, KPI cards, modern table, and right-side add/edit drawer
+- `movies_admin/style_admin.css`: shared admin styling plus scoped genre classes such as `.genre-page`, `.genre-layout`, `.genre-table`, and `.genre-drawer`
+- inline JS inside `movies_admin/list_theloai.php`: slug preview generation, color swatch selection, and delete confirmation
+
+Important consequence:
+- search/filter uses `index.php?page_layout=list_theloai&keyword=...`
+- drawer state uses query params, primarily `drawer=add` and `drawer=edit&id={theloai_id}`
+- legacy routes `movies_admin/themtheloai.php` and `movies_admin/capnhattheloai.php` now redirect into the new drawer-based UI instead of rendering standalone forms
+- add still submits `txtTenQuocGia` to `movies_admin/xuly_themtheloai.php`, edit still submits `txthoten` to `movies_admin/xulycapnhattheloai.php`, so old handler field names remain intact
+- slug, color, and description are UI preview only; they are not stored in the database because `genres` currently has only `theloai_id` and `ten_theloai`
+- per-genre movie counts and KPI metrics are derived from `movie_genre`
+- deleting a genre now checks `movie_genre` first in `movies_admin/xuly_xoatheloai.php`; if mappings exist, deletion is blocked and the admin must remove mappings before deleting the genre
+
 ## Database model discovered from `data/ssssb.sql`
 Primary tables:
 - `users`

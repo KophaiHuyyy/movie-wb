@@ -1,46 +1,50 @@
-<html>
-	<body>
-	<?php
-	if (isset($_POST['btnThem'])) {
+<?php
+include_once "checkpermission.php";
+include_once "cauhinh.php";
 
-        // Lấy dữ liệu từ biểu mẫu
-        $tenTheLoai = $_POST['txtTenQuocGia'];
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
-		// Kiểm tra các trường không được trống
-        if (empty($tenTheLoai) ) {
-            echo "Vui lòng điền đầy đủ thông tin!";
-            exit;
-        }
-		else 
-		{
-			include_once "cauhinh.php";
-			 // Lưu vào CSDL
-             $query = "INSERT INTO `genres`(`ten_theloai`) VALUES ('$tenTheLoai')";	
-            
-             if ($connect->query($query) === true) {
-                 $message = "Đã thêm thể loại vào cơ sỡ dữ liệu.";
-             } else {
-                 $message = "Lỗi: " . $query . "<br>" . $connect->error;
-             }
-             
-             $connect->close();			
-		}		
-    }
+$tenTheLoai = isset($_POST["txtTenQuocGia"]) ? trim((string) $_POST["txtTenQuocGia"]) : "";
 
-	?>	
-	
-	<!-- Hiển thị thông báo -->
-	<?php if ($message != "" && $message == "Đã thêm thể loại vào cơ sỡ dữ liệu."): ?>
-		<script>
-			window.location.href = 'index.php?page_layout=list_theloai';
-			alert("<?php echo $message; ?>");
-		</script>
-	<?php endif; ?>
+if (!isset($_POST["btnThem"])) {
+    header("Location: index.php?page_layout=list_theloai");
+    exit();
+}
 
-	<?php if ($message != ""  && $message != "Đã thêm thể loại vào cơ sỡ dữ liệu."): ?>
-		<script>
-			alert("<?php echo $message; ?>");
-		</script>
-	<?php endif; ?>
-	</body>
-</html>
+if ($tenTheLoai === "") {
+    $_SESSION["admin_genre_notice"] = array(
+        "type" => "error",
+        "message" => "Vui lòng nhập tên thể loại trước khi lưu."
+    );
+    header("Location: index.php?page_layout=list_theloai&drawer=add");
+    exit();
+}
+
+$statement = $connect->prepare("INSERT INTO genres (ten_theloai) VALUES (?)");
+
+if ($statement && $statement->bind_param("s", $tenTheLoai) && $statement->execute()) {
+    $_SESSION["admin_genre_notice"] = array(
+        "type" => "success",
+        "message" => "Đã thêm thể loại vào cơ sở dữ liệu."
+    );
+    $statement->close();
+    $connect->close();
+    header("Location: index.php?page_layout=list_theloai");
+    exit();
+}
+
+if ($statement) {
+    $statement->close();
+}
+
+$_SESSION["admin_genre_notice"] = array(
+    "type" => "error",
+    "message" => "Không thể thêm thể loại ở thời điểm hiện tại."
+);
+
+$connect->close();
+header("Location: index.php?page_layout=list_theloai&drawer=add");
+exit();
+?>
