@@ -1371,6 +1371,7 @@ input {
 }
 
 .movie-footer-cards {
+    margin-top: 15px;
     align-items: stretch;
 }
 
