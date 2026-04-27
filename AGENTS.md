@@ -147,6 +147,21 @@ Important consequence:
 - per-genre movie counts and KPI metrics are derived from `movie_genre`
 - deleting a genre now checks `movie_genre` first in `movies_admin/xuly_xoatheloai.php`; if mappings exist, deletion is blocked and the admin must remove mappings before deleting the genre
 
+### Current admin movie-genre mapping UI
+The admin movie-genre mapping screen has been redesigned around:
+- `movies_admin/list_theloai_phim.php`: main dark admin mapping page with sidebar, topbar, movie search, left movie picker, selected movie preview, genre chip area, genre grid, and inline POST save handler
+- `movies_admin/style_admin.css`: shared admin styling plus mapping classes such as `.mapping-page`, `.mapping-layout`, `.movie-picker-card`, `.movie-picker-item`, `.selected-movie-card`, `.genre-assignment-card`, `.selected-genre-chip`, `.genre-grid`, and `.mapping-save-bar`
+- lightweight inline JS inside `movies_admin/list_theloai_phim.php`: keeps selected genre chips/count in sync, removes chips, and confirms when saving an empty genre selection
+
+Important consequence:
+- the screen is routed by `movies_admin/index.php?page_layout=list_theloai_phim`
+- movie selection uses `movie_id` in the query string; if absent, the first movie in the current filtered list is selected
+- movie search uses `keyword`, optional country filter uses `country_id`, and pagination uses `page`
+- the save form posts back to `movies_admin/list_theloai_phim.php` itself with `mapping_action=save_movie_genres`
+- mapping is stored in table `movie_genre` using columns `movie_id` and `theloai_id`
+- saving validates the target movie exists in `movies`, validates every posted genre id exists in `genres`, deletes old rows in `movie_genre` for that `movie_id`, then inserts the new set without duplicates
+- legacy routes `movies_admin/themtheloai_phim.php` and `movies_admin/capnhattheloai_phim.php` now redirect into the redesigned mapping screen instead of rendering old standalone forms
+
 ## Database model discovered from `data/ssssb.sql`
 Primary tables:
 - `users`
