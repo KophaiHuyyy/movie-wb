@@ -36,7 +36,7 @@ if ($deleteUser) {
 $connect->close();
 
 if ($ok) {
-    header("Location: index.php?page_layout=list_user");
+    header("Location: index.php?page_layout=list_user&notice=deleted");
     exit();
 }
 ?>

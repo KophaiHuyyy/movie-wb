@@ -180,6 +180,23 @@ Important consequence:
 - add/edit forms still rely on input names `fullname`, `username`, `password`, `passwordxacnhan`, `email`, and `myRadio`; update now allows blank password fields to keep the current stored password unchanged
 - deleting a user now removes related rows in `reviews` and `watchlist` before deleting the `users` row to avoid orphan data in the MyISAM schema
 
+### Current admin add/edit account UI
+The admin add/edit account forms are now redesigned around:
+- `movies_admin/them_user.php`: dark admin add-account screen with shared sidebar/topbar, two-column form layout, role selector cards, security note, and sticky action bar
+- `movies_admin/capnhattaikhoan.php`: dark admin edit-account screen with the same layout, prefilled profile fields, blank-only password change section, account metadata panel, and empty-state fallback when the user id is invalid
+- `movies_admin/style_admin.css`: shared admin styling plus form classes such as `.account-form-page`, `.account-form-layout`, `.account-form-card`, `.role-option-card`, `.security-note`, `.account-info-list`, and `.sticky-action-bar`
+
+Important consequence:
+- the add form still submits to `movies_admin/xuly_themuser.php`
+- the edit form still submits to `movies_admin/xuly_capnhatuser.php?id={user_id}`
+- input names that must stay aligned with the handlers are `fullname`, `username`, `password`, `passwordxacnhan`, `email`, `myRadio`, and submit name `btndangky`
+- role mapping remains `1 = admin`, `0 = user`
+- the existing plaintext `users.password` model is unchanged in this task; no hashing migration was introduced
+- old passwords must never be prefilled or rendered into HTML on the edit screen
+- `movies_admin/xuly_capnhatuser.php` now keeps the current stored password unchanged when both password inputs are blank, and only updates `users.password` when a new password is provided
+- `movies_admin/xuly_themuser.php` and `movies_admin/xuly_capnhatuser.php` were updated to validate email, validate role values, and enforce username/email uniqueness with prepared statements
+- no database schema changes were made
+
 ### Current admin country UI
 The admin country management screen has been redesigned around:
 - `movies_admin/themquocgia.php`: main dark admin country page with search, KPI summary, modern country table, pagination, and centered add/edit modal rendered on the same route

@@ -139,6 +139,7 @@ $adminName = !empty($_SESSION["fullname"]) ? $_SESSION["fullname"] : "Admin Dire
 $keyword = isset($_GET["keyword"]) ? trim((string) $_GET["keyword"]) : "";
 $roleFilter = isset($_GET["role"]) ? trim((string) $_GET["role"]) : "all";
 $statusFilter = isset($_GET["status"]) ? trim((string) $_GET["status"]) : "active";
+$noticeStatus = isset($_GET["notice"]) ? trim((string) $_GET["notice"]) : "";
 $page = isset($_GET["page"]) ? max(1, (int) $_GET["page"]) : 1;
 $perPage = 10;
 
@@ -149,6 +150,15 @@ if ($roleFilter !== "all" && $roleFilter !== "0" && $roleFilter !== "1") {
 $allowedStatuses = array("active", "all", "offline", "locked");
 if (!in_array($statusFilter, $allowedStatuses, true)) {
     $statusFilter = "active";
+}
+
+$flashMessage = "";
+if ($noticeStatus === "created") {
+    $flashMessage = "Đã tạo tài khoản mới.";
+} elseif ($noticeStatus === "updated") {
+    $flashMessage = "Đã cập nhật tài khoản.";
+} elseif ($noticeStatus === "deleted") {
+    $flashMessage = "Đã xóa tài khoản.";
 }
 
 $totalUsers = (int) admin_fetch_scalar_prepared(
@@ -379,6 +389,12 @@ $displayEnd = $filteredTotal > 0 ? min($filteredTotal, $offset + count($users)) 
                     <button class="security-button" type="button">Cấu hình bảo mật</button>
                 </article>
             </section>
+
+            <?php if ($flashMessage !== "") { ?>
+                <div class="account-form-alert account-form-alert-success">
+                    <?php echo admin_escape($flashMessage); ?>
+                </div>
+            <?php } ?>
 
             <section class="account-filter-row">
                 <form class="account-filter-bar" action="index.php" method="get">

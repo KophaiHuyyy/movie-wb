@@ -3603,3 +3603,433 @@ input {
         padding-right: 20px;
     }
 }
+
+.account-form-page {
+    display: grid;
+    gap: 24px;
+}
+
+.account-form-hero {
+    position: relative;
+    overflow: hidden;
+    padding: 28px 30px;
+    border-radius: 28px;
+    background:
+        radial-gradient(circle at top right, rgba(229, 9, 20, 0.2), transparent 34%),
+        linear-gradient(145deg, rgba(27, 32, 43, 0.98), rgba(15, 19, 27, 0.98));
+}
+
+.account-form-hero::after {
+    content: "";
+    position: absolute;
+    inset: auto -52px -58px auto;
+    width: 170px;
+    height: 170px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.account-form-hero-copy {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    gap: 16px;
+}
+
+.account-form-breadcrumb {
+    color: var(--admin-text-muted);
+    font-size: 0.86rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.account-form-title-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 18px;
+}
+
+.account-form-title-row h1 {
+    margin: 0 0 10px;
+    color: #ffe6e7;
+    font-size: clamp(2rem, 2vw, 2.55rem);
+    line-height: 1.05;
+}
+
+.account-form-title-row p {
+    max-width: 58ch;
+    margin: 0;
+    color: var(--admin-text-muted);
+    line-height: 1.65;
+}
+
+.account-form-badge-stack {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.account-form-badge {
+    display: inline-flex;
+    align-items: center;
+    min-height: 38px;
+    padding: 0 16px;
+    border-radius: 999px;
+    background: rgba(229, 9, 20, 0.18);
+    border: 1px solid rgba(255, 125, 135, 0.24);
+    color: #ffd8db;
+    font-weight: 700;
+}
+
+.account-form-badge-soft {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.1);
+    color: var(--admin-text);
+}
+
+.account-form-alert {
+    padding: 14px 18px;
+    border-radius: 18px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    font-weight: 600;
+}
+
+.account-form-alert-success {
+    background: rgba(46, 204, 113, 0.12);
+    border-color: rgba(46, 204, 113, 0.26);
+    color: #bdf3d1;
+}
+
+.account-form-alert-error {
+    background: rgba(229, 9, 20, 0.12);
+    border-color: rgba(229, 9, 20, 0.26);
+    color: #ffd5d7;
+}
+
+.account-form-shell {
+    display: grid;
+    gap: 24px;
+}
+
+.account-form-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.45fr) minmax(300px, 0.8fr);
+    gap: 24px;
+    align-items: start;
+}
+
+.account-main-column,
+.account-side-column {
+    display: grid;
+    gap: 24px;
+}
+
+.account-form-card {
+    display: grid;
+    gap: 22px;
+    padding: 26px;
+}
+
+.account-form-card-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.account-form-card-head h2 {
+    margin: 0 0 8px;
+    color: #ffe6e7;
+    font-size: 1.5rem;
+}
+
+.account-form-card-head p {
+    margin: 0;
+    color: var(--admin-text-muted);
+    line-height: 1.6;
+}
+
+.account-form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.account-form-field {
+    display: grid;
+    gap: 10px;
+}
+
+.account-form-field span {
+    color: #9ea7b7;
+    font-size: 0.82rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.account-form-field input,
+.account-form-field select,
+.account-form-field textarea {
+    width: 100%;
+    min-height: 54px;
+    padding: 0 16px;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    background: rgba(8, 11, 17, 0.86);
+    color: var(--admin-text);
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.account-form-field input:focus,
+.account-form-field select:focus,
+.account-form-field textarea:focus {
+    border-color: rgba(255, 140, 148, 0.52);
+    box-shadow: 0 0 0 4px rgba(229, 9, 20, 0.1);
+}
+
+.form-inline-pill {
+    display: grid;
+    gap: 6px;
+    min-height: 54px;
+    padding: 13px 16px;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.form-inline-pill strong {
+    color: var(--admin-text);
+}
+
+.form-inline-pill small {
+    color: var(--admin-text-muted);
+}
+
+.password-section {
+    display: grid;
+    gap: 18px;
+    padding-top: 6px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.account-form-section-copy {
+    display: grid;
+    gap: 8px;
+}
+
+.account-form-section-copy h3 {
+    margin: 0;
+    color: #ffe6e7;
+    font-size: 1.05rem;
+}
+
+.account-form-section-copy p,
+.account-form-helper {
+    margin: 0;
+    color: var(--admin-text-muted);
+    line-height: 1.6;
+}
+
+.role-selector-grid {
+    display: grid;
+    gap: 14px;
+}
+
+.role-option-card {
+    position: relative;
+    display: grid;
+    gap: 10px;
+    padding: 18px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.03);
+    cursor: pointer;
+    transition: transform 0.2s ease, border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.role-option-card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(255, 255, 255, 0.16);
+}
+
+.role-option-card.active {
+    background: rgba(229, 9, 20, 0.12);
+    border-color: rgba(255, 125, 135, 0.34);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.22);
+}
+
+.role-option-card input {
+    position: absolute;
+    inset: 18px 18px auto auto;
+    width: 18px;
+    height: 18px;
+    accent-color: var(--admin-primary);
+}
+
+.role-option-card strong {
+    color: #ffe6e7;
+    font-size: 1.02rem;
+}
+
+.role-option-card p {
+    margin: 0;
+    color: var(--admin-text-muted);
+    line-height: 1.6;
+}
+
+.role-option-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+    min-height: 28px;
+    padding: 0 12px;
+    border-radius: 999px;
+    font-size: 0.76rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.role-option-badge-user {
+    background: rgba(80, 145, 255, 0.13);
+    border: 1px solid rgba(80, 145, 255, 0.24);
+    color: #91bdff;
+}
+
+.role-option-badge-admin {
+    background: rgba(229, 9, 20, 0.14);
+    border: 1px solid rgba(255, 125, 135, 0.26);
+    color: #ffb7bc;
+}
+
+.security-note {
+    display: grid;
+    gap: 8px;
+    padding: 18px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.security-note strong {
+    color: #ffe6e7;
+    font-size: 1rem;
+}
+
+.security-note p {
+    margin: 0;
+    color: var(--admin-text-muted);
+    line-height: 1.65;
+}
+
+.account-side-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.account-side-pill {
+    display: inline-flex;
+    align-items: center;
+    min-height: 36px;
+    padding: 0 12px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: var(--admin-text-muted);
+    font-size: 0.84rem;
+    font-weight: 700;
+}
+
+.account-info-list {
+    display: grid;
+    gap: 12px;
+    margin: 0;
+}
+
+.account-info-list div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 14px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.account-info-list div:last-child {
+    border-bottom: none;
+}
+
+.account-info-list dt {
+    color: var(--admin-text-muted);
+    font-size: 0.9rem;
+}
+
+.account-info-list dd {
+    margin: 0;
+    color: var(--admin-text);
+    font-weight: 700;
+    text-align: right;
+}
+
+.account-action-status {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #e50914, #ff97a1);
+    box-shadow: 0 0 0 6px rgba(229, 9, 20, 0.12);
+}
+
+.account-form-empty-state {
+    justify-items: start;
+    padding: 36px 30px;
+}
+
+.account-form-empty-icon {
+    display: inline-grid;
+    place-items: center;
+    width: 64px;
+    height: 64px;
+    border-radius: 20px;
+    background: rgba(229, 9, 20, 0.12);
+    color: #ffb7bc;
+    font-size: 1.8rem;
+}
+
+.account-form-empty-state h1,
+.account-form-empty-state p {
+    margin: 0;
+}
+
+.account-form-empty-state p {
+    color: var(--admin-text-muted);
+    line-height: 1.6;
+}
+
+@media (max-width: 1080px) {
+    .account-form-layout {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 820px) {
+    .account-form-title-row,
+    .account-form-card-head {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .account-form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .account-form-badge-stack {
+        justify-content: flex-start;
+    }
+}
