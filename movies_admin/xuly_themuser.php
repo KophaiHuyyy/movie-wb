@@ -1,60 +1,80 @@
 <?php
-    include_once "cauhinh.php";
-    //
-    $hoten = $_POST["fullname"];
-    $username = $_POST["username"];
-    $password = $_POST["password"];
-	$passwordXACNHAN = $_POST["passwordxacnhan"];
-    $email = $_POST["email"];
-    if(isset($_POST['btnhuy']))
-    {
-        header('Location: index.php?page_layout=list_user');
-    }
-    if (trim($hoten) == "") {
-        echo "Họ tên không được bỏ trống!";
-    } elseif (trim($username) == "") {
-        echo "Nhập tên tài khoản!";
-    } elseif (trim($password) == "") {
-        echo "Mật khẩu không được bỏ trống";
-	} elseif (trim($passwordXACNHAN) == "") {
-        echo "Vui lòng xác nhận lại mật khẩu";
-	} elseif ($passwordXACNHAN != $password) {
-        echo "Mật khẩu xác nhận không đúng";		
-    } elseif (trim($email) == "") {
-        echo "Email không được bỏ trống";
-    } else {
-        $checkQuery = "SELECT user_id FROM users WHERE username = '$username'";
-        $checkResult = $connect->query($checkQuery);
-        
-        if ($checkResult->num_rows > 0) {
-            $messages = "Tên tài khoản đã tồn tại!";
-        } else {
-            // Lưu vào CSDL
-            $query = "INSERT INTO `users`(`username`, `password`, `email`, `fullname`) VALUES ('$username', '$password', '$email', '$hoten')";
-            
-            if ($connect->query($query) === true) {
-                $message = "Bạn đã tạo tài khoản thành công.";
-            } else {
-                $message = "Lỗi: " . $query . "<br>" . $connect->error;
-            }
-            
-            $connect->close();
+include_once "cauhinh.php";
+
+$hoten = isset($_POST["fullname"]) ? trim((string) $_POST["fullname"]) : "";
+$username = isset($_POST["username"]) ? trim((string) $_POST["username"]) : "";
+$password = isset($_POST["password"]) ? trim((string) $_POST["password"]) : "";
+$passwordXacNhan = isset($_POST["passwordxacnhan"]) ? trim((string) $_POST["passwordxacnhan"]) : "";
+$email = isset($_POST["email"]) ? trim((string) $_POST["email"]) : "";
+$message = "";
+
+if (isset($_POST["btnhuy"])) {
+    header("Location: index.php?page_layout=list_user");
+    exit();
+}
+
+if ($hoten === "") {
+    $message = "Họ tên không được bỏ trống.";
+} elseif ($username === "") {
+    $message = "Nhập tên tài khoản.";
+} elseif ($password === "") {
+    $message = "Mật khẩu không được bỏ trống.";
+} elseif ($passwordXacNhan === "") {
+    $message = "Vui lòng xác nhận lại mật khẩu.";
+} elseif ($passwordXacNhan !== $password) {
+    $message = "Mật khẩu xác nhận không đúng.";
+} elseif ($email === "") {
+    $message = "Email không được bỏ trống.";
+}
+
+if ($message === "") {
+    $checkStatement = $connect->prepare("SELECT user_id FROM users WHERE username = ? LIMIT 1");
+    $exists = false;
+
+    if ($checkStatement && $checkStatement->bind_param("s", $username) && $checkStatement->execute()) {
+        $result = $checkStatement->get_result();
+        if ($result && $result->fetch_assoc()) {
+            $exists = true;
+        }
+        if ($result) {
+            $result->free();
         }
     }
+
+    if ($checkStatement) {
+        $checkStatement->close();
+    }
+
+    if ($exists) {
+        $message = "Tên tài khoản đã tồn tại.";
+    }
+}
+
+if ($message === "") {
+    $role = 0;
+    $insertStatement = $connect->prepare("INSERT INTO users (username, password, email, fullname, role) VALUES (?, ?, ?, ?, ?)");
+
+    if ($insertStatement && $insertStatement->bind_param("ssssi", $username, $password, $email, $hoten, $role) && $insertStatement->execute()) {
+        $message = "Bạn đã tạo tài khoản thành công.";
+    } else {
+        $message = "Không thể tạo tài khoản. Vui lòng thử lại.";
+    }
+
+    if ($insertStatement) {
+        $insertStatement->close();
+    }
+}
+
+$connect->close();
 ?>
-	
-	<!-- Hiển thị thông báo -->
-	<?php if ($message != "" && $message == "Bạn đã tạo tài khoản thành công."): ?>
-		<script>
-			window.location.href = 'index.php?page_layout=list_user';
-			alert("<?php echo $message; ?>");
-		</script>
-	<?php endif; ?>
-
-	<?php if ($message != ""  && $message != "Bạn đã tạo tài khoản thành công."): ?>
-		<script>
-            window.location.href = 'index.php?page_layout=them_user';
-			alert("<?php echo $message; ?>");
-		</script>
-	<?php endif; ?>
-
+<?php if ($message === "Bạn đã tạo tài khoản thành công."): ?>
+    <script>
+        window.location.href = 'index.php?page_layout=list_user';
+        alert("<?php echo $message; ?>");
+    </script>
+<?php else: ?>
+    <script>
+        window.location.href = 'index.php?page_layout=them_user';
+        alert("<?php echo $message; ?>");
+    </script>
+<?php endif; ?>

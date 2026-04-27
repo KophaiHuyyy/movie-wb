@@ -162,6 +162,24 @@ Important consequence:
 - saving validates the target movie exists in `movies`, validates every posted genre id exists in `genres`, deletes old rows in `movie_genre` for that `movie_id`, then inserts the new set without duplicates
 - legacy routes `movies_admin/themtheloai_phim.php` and `movies_admin/capnhattheloai_phim.php` now redirect into the redesigned mapping screen instead of rendering old standalone forms
 
+### Current admin account/user UI
+The admin account management screen has been redesigned around:
+- `movies_admin/list_user.php`: main dark admin user page with sidebar, topbar, KPI cards, role/status filters, paginated account table, floating add button, and links to the existing add/edit/delete flows
+- `movies_admin/style_admin.css`: shared admin styling plus account classes such as `.account-page`, `.account-overview-grid`, `.account-filter-bar`, `.account-table`, `.user-avatar`, `.role-badge`, `.status-dot`, `.security-button`, and `.floating-add-button`
+- no extra JS file is required; delete still uses inline confirm on the action link
+
+Important consequence:
+- search uses query param `keyword`
+- role filter uses query param `role` with values `all`, `1`, or `0`
+- pagination uses query param `page`
+- the status dropdown uses query param `status`, but it is currently UI-only because table `users` has no status column
+- role mapping remains `1 = admin`, `0 = user`
+- the account table must never render `users.password`; only user id, profile fields, role, and aggregate counts are shown
+- reviews count is derived from table `reviews` by `user_id`, and watchlist count is derived from table `watchlist` by `user_id`
+- add/edit/delete links still follow the legacy routes `page_layout=them_user`, `page_layout=capnhattaikhoan&id={user_id}`, and `page_layout=xuly_xoauser&id={user_id}`
+- add/edit forms still rely on input names `fullname`, `username`, `password`, `passwordxacnhan`, `email`, and `myRadio`; update now allows blank password fields to keep the current stored password unchanged
+- deleting a user now removes related rows in `reviews` and `watchlist` before deleting the `users` row to avoid orphan data in the MyISAM schema
+
 ## Database model discovered from `data/ssssb.sql`
 Primary tables:
 - `users`

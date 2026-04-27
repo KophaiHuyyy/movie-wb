@@ -206,7 +206,7 @@ tr{
                 </td>
                 <td>
                 <p id ="danhdau">
-                    <input type="text" name = "password" id ="txt" placeholder="Enter Password">
+                    <input type="password" name = "password" id ="txt" placeholder="Enter Password">
                    *</p>
                 </td>
             </tr>
@@ -216,7 +216,7 @@ tr{
                 </td>
                 <td>
                 <p id ="danhdau">
-                    <input type="text" name = "passwordxacnhan" id ="txt" placeholder="Enter Password">
+                    <input type="password" name = "passwordxacnhan" id ="txt" placeholder="Enter Password">
                    *</p>
                 </td>
             </tr>

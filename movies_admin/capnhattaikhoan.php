@@ -220,7 +220,7 @@ tr{
                 </td>
                 <td>
                 <p id ="danhdau">
-                    <input type="text" name = "password" id ="txt" placeholder="Enter Password"value= <?php echo"'".$row["password"]."'"; ?>>
+                    <input type="password" name = "password" id ="txt" placeholder="Để trống nếu không đổi mật khẩu">
                    *</p>
                 </td>
             </tr>
@@ -230,7 +230,7 @@ tr{
                 </td>
                 <td>
                 <p id ="danhdau">
-                    <input type="text" name = "passwordxacnhan" id ="txt" placeholder="Enter Password" value= <?php echo"'".$row["password"]."'"; ?>>
+                    <input type="password" name = "passwordxacnhan" id ="txt" placeholder="Nhập lại mật khẩu mới nếu muốn đổi">
                    *</p>
                 </td>
             </tr>
