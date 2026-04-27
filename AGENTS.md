@@ -180,6 +180,23 @@ Important consequence:
 - add/edit forms still rely on input names `fullname`, `username`, `password`, `passwordxacnhan`, `email`, and `myRadio`; update now allows blank password fields to keep the current stored password unchanged
 - deleting a user now removes related rows in `reviews` and `watchlist` before deleting the `users` row to avoid orphan data in the MyISAM schema
 
+### Current admin country UI
+The admin country management screen has been redesigned around:
+- `movies_admin/themquocgia.php`: main dark admin country page with search, KPI summary, modern country table, pagination, and centered add/edit modal rendered on the same route
+- `movies_admin/style_admin.css`: shared admin styling plus country classes such as `.country-page`, `.country-table`, `.country-avatar`, `.country-count-pill`, `.country-modal-overlay`, `.country-modal`, and `.country-upload-box`
+- lightweight inline JS inside `movies_admin/themquocgia.php`: only handles toast auto-hide; modal open/close is driven by query params
+
+Important consequence:
+- search uses query param `keyword`
+- pagination uses query param `page`
+- add/edit modal state uses query param `modal` (`add` or `edit`) and edit record selection uses `id`
+- add, edit, and delete all submit back to `movies_admin/themquocgia.php` with POST field `country_action`
+- the only field stored in table `country` is `txtTenQuocGia`, which maps to column `country_name`
+- ISO code and flag upload are currently UI placeholders only; they are not stored because table `country` only has `country_id` and `country_name`
+- movie count per country is derived from table `movies` by `country_id`
+- deleting a country first checks `movies.country_id`; if any movie still references that country, deletion is blocked
+- the legacy helper route `movies_admin/xuly_themquocgia.php` now redirects back to the redesigned `page_layout=themquocgia` screen
+
 ## Database model discovered from `data/ssssb.sql`
 Primary tables:
 - `users`
