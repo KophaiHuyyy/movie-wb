@@ -30,7 +30,7 @@ if ($listtheloai) {
     <?php } ?>
 </head>
 
-<body class="<?php echo $currentPage === 'home' ? 'is-home' : 'is-inner'; ?>">
+<body class="<?php echo $currentPage === 'home' ? 'is-home' : 'is-inner'; ?> page-<?php echo htmlspecialchars($currentPage); ?>">
     <div class="site-bg"></div>
     <header class="site-header">
         <div class="topbar">
@@ -38,7 +38,7 @@ if ($listtheloai) {
                 <img class="brand-logo" src="anhnen/IT (4).png" alt="ITmovie">
                 <div class="brand-copy">
                     <span class="brand-title">ITmovie</span>
-                    <span class="brand-subtitle">Review và xem phim mỗi ngày</span>
+                    <span class="brand-subtitle">Review va xem phim moi ngay</span>
                 </div>
             </a>
 
@@ -50,9 +50,9 @@ if ($listtheloai) {
 
             <nav class="main-nav" id="mainNav">
                 <a href="index.php?page_layout=home"
-                    class="<?php echo $currentPage === 'home' ? 'active' : ''; ?>">Trang chủ</a>
+                    class="<?php echo $currentPage === 'home' ? 'active' : ''; ?>">Trang chu</a>
                 <div class="nav-dropdown">
-                    <a href="#" class="nav-link">Thể loại</a>
+                    <a href="#" class="nav-link">The loai</a>
                     <div class="dropdown-panel">
                         <?php foreach ($genreItems as $genreItem) { ?>
                         <a href="index.php?page_layout=theloai&id=<?php echo (int) $genreItem['theloai_id']; ?>">
@@ -61,7 +61,7 @@ if ($listtheloai) {
                         <?php } ?>
                     </div>
                 </div>
-                <a href="index.php?page_layout=timkiemphim">Tìm kiếm</a>
+                <a href="index.php?page_layout=timkiemphim">Tim kiem</a>
                 <a href="index.php?page_layout=danhsachxemsau">Xem sau</a>
             </nav>
 
@@ -69,8 +69,8 @@ if ($listtheloai) {
                 <form class="search-form" action="index.php" method="get">
                     <input type="hidden" name="page_layout" value="timkiemphim">
                     <input type="text" name="txttimkiem" class="txttimkiem"
-                        placeholder="Tìm tên phim, nội dung, thể loại...">
-                    <button type="submit">Tìm</button>
+                        placeholder="Tim ten phim, noi dung, the loai...">
+                    <button type="submit">Tim</button>
                 </form>
 
                 <?php if ($isLoggedIn) { ?>
@@ -79,9 +79,9 @@ if ($listtheloai) {
                     Xin chao, <?php echo htmlspecialchars($fullname); ?>
                 </a>
                 <a class="logout-btn" href="logout.php"
-                    onclick="return confirm('Bạn có chắc chắn muốn ĐĂNG XUẤT không?')">Đăng xuất</a>
+                    onclick="return confirm('Ban co chac chan muon DANG XUAT khong?')">Dang xuat</a>
                 <?php } else { ?>
-                <a class="login-btn" href="login.php">Đăng nhập</a>
+                <a class="login-btn" href="login.php">Dang nhap</a>
                 <?php } ?>
             </div>
         </div>
@@ -94,37 +94,26 @@ if ($listtheloai) {
     <footer class="site-footer">
         <div class="footer-grid">
             <div>
-                <h3>ITmovie</h3>
-                <p>Trang xem phim và review theo phong cách đơn giản, tập trung vao nội dung va trải nghiệm duyệt phim
-                    nhanh.</p>
+                <h3>ITMOVIES</h3>
+                <p>Phim hay moi ngay</p>
+                <p>ITMOVIES cung cap trai nghiem xem phim truc tuyen voi giao dien hien dai, toc do nhanh va kho phim da dang.</p>
+            </div>
+            <div>
+                <h3>Dieu huong</h3>
+                <a href="index.php?page_layout=home">Hoi-Dap</a>
+                <a href="index.php?page_layout=home">Chinh sach bao mat</a>
+                <a href="index.php?page_layout=home">Dieu khoan su dung</a>
             </div>
             <div>
                 <h3>Kham pha</h3>
-                <a href="index.php?page_layout=home">Trang chủ</a>
-                <a href="index.php?page_layout=timkiemphim">Tìm kiếm phim</a>
-                <a href="index.php?page_layout=danhsachxemsau">Danh sách xem sau</a>
-            </div>
-            <div>
-                <h3>Danh mục</h3>
-                <?php
-        $genreLimit = 0;
-        foreach ($genreItems as $genreItem) {
-          if ($genreLimit >= 5) {
-            break;
-          }
-        ?>
-                <a href="index.php?page_layout=theloai&id=<?php echo (int) $genreItem['theloai_id']; ?>">
-                    <?php echo htmlspecialchars($genreItem['ten_theloai']); ?>
-                </a>
-                <?php
-          $genreLimit++;
-        }
-        ?>
+                <a href="index.php?page_layout=home">Gioi thieu</a>
+                <a href="index.php?page_layout=timkiemphim">Tim phim</a>
+                <a href="index.php?page_layout=danhsachxemsau">Lien he</a>
             </div>
         </div>
         <div class="footer-bottom">
-            <span>Movie review website</span>
-            <span>Database: review</span>
+            <span>&copy; 2026 ITMOVIES</span>
+            <span>Kho phim online cho trai nghiem xem nhanh va toi gian</span>
         </div>
     </footer>
 

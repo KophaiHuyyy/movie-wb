@@ -105,6 +105,24 @@ Important consequence:
 - the detail "Yeu thich" and "Them vao" actions use the existing `page_layout=xemsau&id={movie_id}&iduser={user_id}` flow when logged in, otherwise redirect to `login.php`
 - the comment box on the redesigned detail page is currently UI-only; the page displays existing rows from `reviews` but does not implement review submission
 
+### Current user watch movie UI
+The user watch page has been redesigned around:
+- `users/xemphim.php`: partial page rendered through `users/index.php?page_layout=xemphim&id={movie_id}`, with breadcrumb/back row, large player card, dark action bar, comment area on the left, right recommendation/info sidebar, and mobile mini bottom nav
+- `users/style_detailphim.css`: watch styles are scoped under `.watch-page`, plus `body.page-xemphim .site-footer` for the shared footer treatment
+- `users/index.php`: still wraps the page via `users/doPage.php`, now adds `page-{page_layout}` to `<body>` so watch-page-specific shell styling can target the shared footer safely
+
+Important consequence:
+- `users/xemphim.php` now casts `$_GET['id']` to integer and uses prepared statements for the touched movie/genre/review/watchlist/recommendation queries
+- the route/query string stays `users/index.php?page_layout=xemphim&id={movie_id}`
+- video source is resolved from `movies.link1` then `movies.link2`; valid YouTube ids/URLs render as `<iframe>`, direct `.mp4/.webm/.ogg` links render as `<video controls>`, invalid placeholder values fall back to a poster placeholder state
+- poster/fallback artwork still reads from `../movies_admin/hinhanhphim/{movies.img}`
+- watchlist actions still use the existing `page_layout=xemsau&id={movie_id}&iduser={user_id}` flow when logged in, otherwise send the user to `login.php`
+- the page preserves the old login gate behavior by storing `$_SESSION['redirect']` for the watch URL; unauthenticated users see a styled locked-player state instead of the raw legacy message
+- comments display real rows from `reviews` joined with `users`, but comment submission on `xemphim.php` is still UI-only and does not write to the database
+- recommendation sidebar prefers movies from the first matched genre via `movie_genre`, excludes the current movie, and falls back to highest-view/latest movies if no genre-based matches are found
+- the lightweight inline JS on `users/xemphim.php` only handles comment character counting, share/copy-link behavior, HTML5 skip-intro behavior, and the existing delayed view-count update call to `users/update_view_count.php`
+- the sidebar "Dien vien" area is currently an information placeholder because the schema has no actor table; real movie metadata from `movies`, `country`, and `genres` is shown instead
+
 ### Current auth UI
 The auth pages have been redesigned around:
 - `users/login.php`: standalone login page with poster-wall background, dark glass panel, preserved `action="xuly_login.php"` login form, register link, and forgot-password link
