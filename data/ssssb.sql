@@ -198,7 +198,8 @@ CREATE TABLE `reviews` (
   `user_id` int(11) NOT NULL,
   `rating` int(11) NOT NULL,
   `comment` text DEFAULT NULL,
-  `review_date` datetime DEFAULT NULL
+  `review_date` datetime DEFAULT NULL,
+  `is_hidden` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -304,7 +305,8 @@ ALTER TABLE `movie_genre`
 ALTER TABLE `reviews`
   ADD PRIMARY KEY (`review_id`),
   ADD KEY `movie_id` (`movie_id`),
-  ADD KEY `user_id` (`user_id`);
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `is_hidden` (`is_hidden`);
 
 --
 -- Indexes for table `users`

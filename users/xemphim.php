@@ -140,6 +140,12 @@ $recommendations = array();
 $reviewCount = 0;
 $averageRating = 0;
 $watchlistExists = false;
+$currentUserReview = null;
+$reviewFlash = isset($_SESSION['review_flash']) && is_array($_SESSION['review_flash']) ? $_SESSION['review_flash'] : null;
+
+if ($reviewFlash !== null) {
+    unset($_SESSION['review_flash']);
+}
 
 if ($movieId > 0) {
     $movieStmt = $connect->prepare("
@@ -201,7 +207,7 @@ if ($genreStmt) {
 $statsStmt = $connect->prepare("
     SELECT COUNT(*) AS total_reviews, AVG(rating) AS average_rating
     FROM reviews
-    WHERE movie_id = ?
+    WHERE movie_id = ? AND is_hidden = 0
 ");
 if ($statsStmt) {
     $statsStmt->bind_param("i", $movieId);
@@ -218,7 +224,7 @@ $reviewStmt = $connect->prepare("
     SELECT reviews.review_id, reviews.rating, reviews.comment, reviews.review_date, users.username, users.fullname
     FROM reviews
     LEFT JOIN users ON reviews.user_id = users.user_id
-    WHERE reviews.movie_id = ?
+    WHERE reviews.movie_id = ? AND reviews.is_hidden = 0
     ORDER BY COALESCE(reviews.review_date, '1000-01-01 00:00:00') DESC, reviews.review_id DESC
     LIMIT 10
 ");
@@ -230,6 +236,25 @@ if ($reviewStmt) {
         $reviews[] = $row;
     }
     $reviewStmt->close();
+}
+
+if ($currentUserId > 0) {
+    $currentReviewStmt = $connect->prepare("
+        SELECT review_id, rating, comment, review_date
+        FROM reviews
+        WHERE movie_id = ? AND user_id = ?
+        ORDER BY review_id DESC
+        LIMIT 1
+    ");
+    if ($currentReviewStmt) {
+        $currentReviewStmt->bind_param("ii", $movieId, $currentUserId);
+        $currentReviewStmt->execute();
+        $currentReviewResult = $currentReviewStmt->get_result();
+        if ($currentReviewResult && $currentReviewResult->num_rows > 0) {
+            $currentUserReview = $currentReviewResult->fetch_assoc();
+        }
+        $currentReviewStmt->close();
+    }
 }
 
 if ($currentUserId > 0) {
@@ -307,12 +332,15 @@ $watchlistUrl = $isLoggedIn
 $detailUrl = "index.php?page_layout=chitietphim&id=" . $movieId;
 $shareUrl = "http://localhost/WebsiteReviewPhim/users/index.php?page_layout=xemphim&id=" . $movieId;
 $statusLabel = $videoSource === null ? "Phim sap ra mat" : "Dang chieu";
-$ratingBadge = $averageRating > 0 ? number_format($averageRating, 1) : "0";
+$ratingBadge = $averageRating > 0 ? number_format($averageRating, 1) . "/5" : "Chua co";
+$ratingSummary = $averageRating > 0 ? number_format($averageRating, 1) . " / 5 sao" : "Chua co danh gia";
 $genreNames = array();
 foreach ($genres as $genre) {
     $genreNames[] = $genre['ten_theloai'];
 }
 $genreSummary = !empty($genreNames) ? watch_escape(implode(' / ', $genreNames)) : 'Dang cap nhat the loai';
+$existingCommentValue = $currentUserReview !== null && !empty($currentUserReview['comment']) ? $currentUserReview['comment'] : '';
+$existingRatingValue = $currentUserReview !== null ? (int) $currentUserReview['rating'] : 0;
 ?>
 
 <section class="watch-page" data-share-url="<?php echo watch_escape($shareUrl); ?>">
@@ -404,22 +432,46 @@ $genreSummary = !empty($genreNames) ? watch_escape(implode(' / ', $genreNames)) 
                     <?php if (!$isLoggedIn) { ?>
                         <p class="watch-login-hint">Vui long <a href="login.php">dang nhap</a> de tham gia binh luan.</p>
                     <?php } else { ?>
-                        <p class="watch-login-hint">Khu vuc nay hien dang hien thi UI nhap binh luan. Backend luu moi binh luan chua duoc trien khai trong `xemphim.php`.</p>
+                        <p class="watch-login-hint"><?php echo $currentUserReview !== null ? 'Ban da danh gia phim nay. Gui lai de cap nhat noi dung va so sao.' : 'Hay de lai cam nhan sau khi xem phim. Moi tai khoan duoc luu 1 danh gia cho moi phim.'; ?></p>
                     <?php } ?>
 
-                    <div class="comment-editor">
-                        <textarea maxlength="1000" placeholder="Viet binh luan" <?php echo !$isLoggedIn ? 'disabled' : ''; ?> data-comment-input></textarea>
+                    <?php if ($reviewFlash !== null && !empty($reviewFlash['message'])) { ?>
+                        <div class="watch-review-flash <?php echo $reviewFlash['type'] === 'success' ? 'is-success' : 'is-error'; ?>">
+                            <?php echo watch_escape($reviewFlash['message']); ?>
+                        </div>
+                    <?php } ?>
+
+                    <form class="comment-editor" action="xuly_review.php" method="post">
+                        <input type="hidden" name="movie_id" value="<?php echo $movieId; ?>">
+                        <fieldset class="rating-fieldset" <?php echo !$isLoggedIn ? 'disabled' : ''; ?>>
+                            <legend>Danh gia phim</legend>
+                            <div class="rating-star-group" role="radiogroup" aria-label="Danh gia phim bang sao">
+                                <?php for ($star = 5; $star >= 1; $star--) { ?>
+                                    <input
+                                        type="radio"
+                                        id="rating-star-<?php echo $star; ?>"
+                                        name="rating"
+                                        value="<?php echo $star; ?>"
+                                        <?php echo $existingRatingValue === $star ? 'checked' : ''; ?>>
+                                    <label for="rating-star-<?php echo $star; ?>" title="<?php echo $star; ?> sao">
+                                        <span aria-hidden="true">&#9733;</span>
+                                        <span class="sr-only"><?php echo $star; ?> sao</span>
+                                    </label>
+                                <?php } ?>
+                            </div>
+                            <p class="rating-helper"><?php echo $averageRating > 0 ? 'Diem trung binh hien tai: ' . watch_escape($ratingSummary) . '.' : 'Phim nay chua co danh gia nao.'; ?></p>
+                        </fieldset>
+
+                        <textarea name="comment" maxlength="1000" placeholder="Viet binh luan cua ban ve bo phim nay" <?php echo !$isLoggedIn ? 'disabled' : ''; ?> data-comment-input><?php echo watch_escape($existingCommentValue); ?></textarea>
                         <div class="comment-editor-bar">
-                            <label class="comment-spoiler-toggle">
-                                <input type="checkbox" <?php echo !$isLoggedIn ? 'disabled' : ''; ?>>
-                                <span>Tiet lo?</span>
-                            </label>
                             <div class="comment-editor-actions">
                                 <span data-comment-count>0 / 1000</span>
-                                <button type="button" <?php echo !$isLoggedIn ? 'disabled' : ''; ?>>Gui &#10148;</button>
+                                <button type="submit" <?php echo !$isLoggedIn ? 'disabled' : ''; ?>>
+                                    <?php echo $currentUserReview !== null ? 'Cap nhat &#10148;' : 'Gui &#10148;'; ?>
+                                </button>
                             </div>
                         </div>
-                    </div>
+                    </form>
 
                     <div class="comment-list">
                         <?php if (empty($reviews)) { ?>
@@ -441,7 +493,15 @@ $genreSummary = !empty($genreNames) ? watch_escape(implode(' / ', $genreNames)) 
                                             <span><?php echo watch_format_datetime($review['review_date']); ?></span>
                                         </div>
                                         <div class="watch-comment-rating">
-                                            <span>&#9733; <?php echo (int) $review['rating']; ?>/10</span>
+                                            <span>
+                                                <?php
+                                                $reviewRating = isset($review['rating']) ? (int) $review['rating'] : 0;
+                                                for ($star = 1; $star <= 5; $star++) {
+                                                    echo $star <= $reviewRating ? '&#9733;' : '&#9734;';
+                                                }
+                                                ?>
+                                                <?php echo $reviewRating; ?>/5
+                                            </span>
                                         </div>
                                         <p><?php echo nl2br(watch_escape($review['comment'])); ?></p>
                                     </div>
@@ -455,9 +515,9 @@ $genreSummary = !empty($genreNames) ? watch_escape(implode(' / ', $genreNames)) 
             <aside class="watch-sidebar">
                 <div class="watch-side-card watch-side-card-actions">
                     <div class="watch-side-tabs">
-                        <span><i>&#9733;</i> Danh gia</span>
-                        <span><i>&#128172;</i> Binh luan</span>
-                        <strong><?php echo watch_escape($ratingBadge); ?> Danh gia</strong>
+                        <span><i>&#9733;</i> <?php echo $reviewCount; ?> review</span>
+                        <span><i>&#128172;</i> <?php echo $reviewCount; ?> binh luan</span>
+                        <strong><?php echo watch_escape($ratingBadge); ?></strong>
                     </div>
                 </div>
 

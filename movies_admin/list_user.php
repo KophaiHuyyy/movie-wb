@@ -292,7 +292,7 @@ $displayEnd = $filteredTotal > 0 ? min($filteredTotal, $offset + count($users)) 
                     <span class="admin-nav-icon">&#128101;</span>
                     <span>Người dùng</span>
                 </a>
-                <a class="admin-nav-item" href="index.php#latest-reviews">
+                <a class="admin-nav-item" href="index.php?page_layout=list_review">
                     <span class="admin-nav-icon">&#9733;</span>
                     <span>Đánh giá</span>
                 </a>

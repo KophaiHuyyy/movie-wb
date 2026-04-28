@@ -297,7 +297,7 @@ $colorOptions = array("#f7a39a", "#4a80e8", "#a24df2", "#1fbb84", "#ff963c");
                     <span class="admin-nav-icon">&#128101;</span>
                     <span>Người dùng</span>
                 </a>
-                <a class="admin-nav-item" href="index.php#latest-reviews">
+                <a class="admin-nav-item" href="index.php?page_layout=list_review">
                     <span class="admin-nav-icon">&#9733;</span>
                     <span>Đánh giá</span>
                 </a>

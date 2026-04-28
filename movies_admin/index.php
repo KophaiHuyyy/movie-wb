@@ -282,7 +282,7 @@ $activityItems = array(
                     <span class="admin-nav-icon">&#128101;</span>
                     <span>Người dùng</span>
                 </a>
-                <a class="admin-nav-item" href="#latest-reviews">
+                <a class="admin-nav-item" href="index.php?page_layout=list_review">
                     <span class="admin-nav-icon">&#9733;</span>
                     <span>Đánh giá</span>
                 </a>
@@ -575,6 +575,7 @@ $activityItems = array(
                                                     echo $star <= $rating ? "&#9733;" : "&#9734;";
                                                 }
                                                 ?>
+                                                <span><?php echo admin_escape($rating . "/5"); ?></span>
                                             </div>
                                             <p><?php echo admin_escape(!empty($review["comment"]) ? $review["comment"] : "Đánh giá chưa có nội dung bình luận."); ?></p>
                                             <span class="review-movie"><?php echo admin_escape($review["movie_title"]); ?></span>

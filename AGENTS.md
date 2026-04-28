@@ -103,7 +103,10 @@ Important consequence:
 - `users/chitietphim.php` now casts `$_GET['id']` to integer before querying and should remain a partial, not a full HTML document, because it is included by `users/doPage.php`
 - detail images still use `../movies_admin/hinhanhphim/{movies.img}`
 - the detail "Yeu thich" and "Them vao" actions use the existing `page_layout=xemsau&id={movie_id}&iduser={user_id}` flow when logged in, otherwise redirect to `login.php`
-- the comment box on the redesigned detail page is currently UI-only; the page displays existing rows from `reviews` but does not implement review submission
+- the detail comment form now submits to `users/xuly_review.php` with hidden field `return_page=chitietphim`, so create/update review actions redirect back to the detail page instead of the watch page
+- each logged-in user currently has one effective review per movie at the code level: if a matching `movie_id + user_id` review exists, the handler updates it instead of inserting a duplicate
+- detail review UI uses the existing `reviews.rating`, `reviews.comment`, and `reviews.review_date` fields with a 1-5 star scale
+- public review stats/list on the detail page only include rows where `reviews.is_hidden = 0`; a logged-in user can still load their own latest review into the form even if admin has hidden it
 
 ### Current user watch movie UI
 The user watch page has been redesigned around:
@@ -118,7 +121,9 @@ Important consequence:
 - poster/fallback artwork still reads from `../movies_admin/hinhanhphim/{movies.img}`
 - watchlist actions still use the existing `page_layout=xemsau&id={movie_id}&iduser={user_id}` flow when logged in, otherwise send the user to `login.php`
 - the page preserves the old login gate behavior by storing `$_SESSION['redirect']` for the watch URL; unauthenticated users see a styled locked-player state instead of the raw legacy message
-- comments display real rows from `reviews` joined with `users`, but comment submission on `xemphim.php` is still UI-only and does not write to the database
+- comments display real rows from `reviews` joined with `users`, and the comment/rating form now submits to `users/xuly_review.php`
+- the watch review form currently posts `movie_id`, `rating`, and `comment`; the shared handler creates or updates the existing review for the logged-in `user_id`
+- public review stats/list on the watch page only include rows where `reviews.is_hidden = 0`; hidden reviews stay editable by their owner through the shared review form but do not render publicly
 - recommendation sidebar prefers movies from the first matched genre via `movie_genre`, excludes the current movie, and falls back to highest-view/latest movies if no genre-based matches are found
 - the lightweight inline JS on `users/xemphim.php` only handles comment character counting, share/copy-link behavior, HTML5 skip-intro behavior, and the existing delayed view-count update call to `users/update_view_count.php`
 - the sidebar "Dien vien" area is currently an information placeholder because the schema has no actor table; real movie metadata from `movies`, `country`, and `genres` is shown instead
@@ -215,6 +220,22 @@ Important consequence:
 - `movies_admin/xuly_themuser.php` and `movies_admin/xuly_capnhatuser.php` were updated to validate email, validate role values, and enforce username/email uniqueness with prepared statements
 - no database schema changes were made
 
+### Current admin review management UI
+The admin review management screen is currently organized around:
+- `movies_admin/list_review.php`: main dark admin review page with sidebar, topbar search, heading actions, KPI cards, filter bar, review table, and pagination
+- `movies_admin/style_admin.css`: shared admin styling plus review classes such as `.review-page`, `.review-stats-grid`, `.review-filter-bar`, `.review-table`, `.review-status-badge`, and `.review-pagination`
+- lightweight inline JS inside `movies_admin/list_review.php`: only toggles the filter panel open/collapsed state
+
+Important consequence:
+- the screen is routed by `movies_admin/index.php?page_layout=list_review`
+- search uses query param `keyword`, rating filter uses `rating`, visibility filter uses `status` with values `hien` or `an`, movie filter uses `movie_id`, and pagination uses `page`
+- review rows are loaded from `reviews` joined with `movies`, `users`, and `country`; movie genres are derived by `movie_genre -> genres`
+- KPI totals use `COUNT(*)` from `reviews`, `COUNT(*) WHERE reviews.is_hidden = 0`, `COUNT(*) WHERE reviews.is_hidden = 1`, and `AVG(reviews.rating)` over visible rows for the public-facing average score
+- review visibility is stored for real in `reviews.is_hidden`; approve/duyet and violation-report logic do not exist in the current schema and are not rendered as fake actions
+- admin can hide/show a review through `movies_admin/xuly_anreview.php` via `page_layout=xuly_anreview&id={review_id}&visibility={an|hien}`, and hidden reviews are removed from public review lists/stats on the user site
+- delete review is real and handled by `movies_admin/xuly_xoareview.php` via `page_layout=xuly_xoareview&id={review_id}` with confirm + redirect back to the list
+- fields that must stay aligned with user-side review flows are `reviews.review_id`, `reviews.movie_id`, `reviews.user_id`, `reviews.rating`, `reviews.comment`, `reviews.review_date`, and `reviews.is_hidden`
+
 ### Current admin country UI
 The admin country management screen has been redesigned around:
 - `movies_admin/themquocgia.php`: main dark admin country page with search, KPI summary, modern country table, pagination, and centered add/edit modal rendered on the same route
@@ -241,6 +262,9 @@ Primary tables:
 - `country`
 - `watchlist`
 - `reviews`
+
+Current moderation field used by review management:
+- `reviews.is_hidden`: `0 = hien`, `1 = an`
 
 ### Important relationships
 - `movies.country_id -> country.country_id`

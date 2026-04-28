@@ -14,6 +14,12 @@ $rankingMovies = array();
 $reviews = array();
 $reviewCount = 0;
 $averageRating = 0;
+$currentUserReview = null;
+$reviewFlash = isset($_SESSION['review_flash']) && is_array($_SESSION['review_flash']) ? $_SESSION['review_flash'] : null;
+
+if ($reviewFlash !== null) {
+    unset($_SESSION['review_flash']);
+}
 
 if ($ID > 0) {
     $movieResult = $connect->query("
@@ -42,30 +48,60 @@ if ($ID > 0) {
         }
     }
 
-    $reviewStats = $connect->query("
+    $reviewStatsStmt = $connect->prepare("
         SELECT COUNT(*) AS total_reviews, AVG(rating) AS average_rating
         FROM reviews
-        WHERE movie_id = $ID
+        WHERE movie_id = ? AND is_hidden = 0
     ");
 
-    if ($reviewStats) {
-        $stats = $reviewStats->fetch_assoc();
-        $reviewCount = isset($stats['total_reviews']) ? (int) $stats['total_reviews'] : 0;
-        $averageRating = !empty($stats['average_rating']) ? round((float) $stats['average_rating'], 1) : 0;
+    if ($reviewStatsStmt) {
+        $reviewStatsStmt->bind_param("i", $ID);
+        $reviewStatsStmt->execute();
+        $reviewStatsResult = $reviewStatsStmt->get_result();
+        if ($reviewStatsResult && $stats = $reviewStatsResult->fetch_assoc()) {
+            $reviewCount = isset($stats['total_reviews']) ? (int) $stats['total_reviews'] : 0;
+            $averageRating = !empty($stats['average_rating']) ? round((float) $stats['average_rating'], 1) : 0;
+        }
+        $reviewStatsStmt->close();
     }
 
-    $reviewResult = $connect->query("
+    $reviewStmt = $connect->prepare("
         SELECT reviews.*, users.fullname
         FROM reviews
         LEFT JOIN users ON reviews.user_id = users.user_id
-        WHERE reviews.movie_id = $ID
+        WHERE reviews.movie_id = ? AND reviews.is_hidden = 0
         ORDER BY reviews.review_date DESC
         LIMIT 3
     ");
 
-    if ($reviewResult) {
-        while ($row = $reviewResult->fetch_assoc()) {
+    if ($reviewStmt) {
+        $reviewStmt->bind_param("i", $ID);
+        $reviewStmt->execute();
+        $reviewResult = $reviewStmt->get_result();
+        while ($reviewResult && $row = $reviewResult->fetch_assoc()) {
             $reviews[] = $row;
+        }
+        $reviewStmt->close();
+    }
+
+    if (isset($_SESSION['user_id'])) {
+        $currentUserId = (int) $_SESSION['user_id'];
+        $currentReviewStmt = $connect->prepare("
+            SELECT review_id, rating, comment, review_date, is_hidden
+            FROM reviews
+            WHERE movie_id = ? AND user_id = ?
+            ORDER BY review_id DESC
+            LIMIT 1
+        ");
+
+        if ($currentReviewStmt) {
+            $currentReviewStmt->bind_param("ii", $ID, $currentUserId);
+            $currentReviewStmt->execute();
+            $currentReviewResult = $currentReviewStmt->get_result();
+            if ($currentReviewResult && $currentReviewResult->num_rows > 0) {
+                $currentUserReview = $currentReviewResult->fetch_assoc();
+            }
+            $currentReviewStmt->close();
         }
     }
 
@@ -135,6 +171,23 @@ $watchLaterUrl = isset($_SESSION['user_id'])
     ? 'index.php?page_layout=xemsau&id=' . $movieId . '&iduser=' . (int) $_SESSION['user_id']
     : 'login.php';
 $displayRating = $averageRating > 0 ? $averageRating : ($views > 0 ? min(9, max(5, $views + 4)) : 6);
+$isLoggedIn = isset($_SESSION['user_id']) && isset($_SESSION['username']) && isset($_SESSION['role']);
+$existingCommentValue = $currentUserReview !== null && !empty($currentUserReview['comment']) ? $currentUserReview['comment'] : '';
+$existingRatingValue = $currentUserReview !== null ? (int) $currentUserReview['rating'] : 0;
+
+if (!function_exists('detail_render_rating_stars')) {
+    function detail_render_rating_stars($rating)
+    {
+        $rating = (int) $rating;
+        $markup = '';
+
+        for ($star = 1; $star <= 5; $star++) {
+            $markup .= $star <= $rating ? '&#9733;' : '&#9734;';
+        }
+
+        return $markup;
+    }
+}
 ?>
 
 <section class="movie-detail-page">
@@ -199,7 +252,7 @@ $displayRating = $averageRating > 0 ? $averageRating : ($views > 0 ? min(9, max(
             <img src="../movies_admin/hinhanhphim/<?php echo htmlspecialchars($rankingMovie['img']); ?>" alt="<?php echo htmlspecialchars($rankingMovie['title']); ?>">
             <span>
               <strong><?php echo htmlspecialchars($rankingMovie['title']); ?></strong>
-              <small>HD • <?php echo !empty($rankingMovie['release_year']) ? htmlspecialchars($rankingMovie['release_year']) : 'Full'; ?></small>
+              <small>HD â€¢ <?php echo !empty($rankingMovie['release_year']) ? htmlspecialchars($rankingMovie['release_year']) : 'Full'; ?></small>
             </span>
           </a>
         <?php } ?>
@@ -208,10 +261,10 @@ $displayRating = $averageRating > 0 ? $averageRating : ($views > 0 ? min(9, max(
 
     <main class="detail-main">
       <div class="detail-action-bar">
-        <a class="detail-play-btn" href="index.php?page_layout=xemphim&id=<?php echo $movieId; ?>">▶ Xem ngay</a>
-        <a class="detail-action" href="<?php echo $watchLaterUrl; ?>">♥ Yeu thich</a>
+        <a class="detail-play-btn" href="index.php?page_layout=xemphim&id=<?php echo $movieId; ?>">â–¶ Xem ngay</a>
+        <a class="detail-action" href="<?php echo $watchLaterUrl; ?>">â™¥ Yeu thich</a>
         <a class="detail-action" href="<?php echo $watchLaterUrl; ?>">+ Them vao</a>
-        <a class="detail-action" href="index.php?page_layout=reviewphim&id=<?php echo $movieId; ?>">↗ Chia se</a>
+        <a class="detail-action" href="index.php?page_layout=reviewphim&id=<?php echo $movieId; ?>">â†— Chia se</a>
         <a class="detail-action" href="#detail-comments">Binh luan</a>
         <span class="detail-score"><?php echo $reviewCount; ?> danh gia</span>
       </div>
@@ -228,7 +281,7 @@ $displayRating = $averageRating > 0 ? $averageRating : ($views > 0 ? min(9, max(
 
       <section class="episode-panel" id="episodes">
         <div class="episode-head">
-          <h2>☰ Phan 1</h2>
+          <h2>â˜° Phan 1</h2>
           <label><span>Rut gon</span><input type="checkbox" checked></label>
         </div>
         <div class="episode-tabs">
@@ -237,8 +290,8 @@ $displayRating = $averageRating > 0 ? $averageRating : ($views > 0 ? min(9, max(
           <button type="button">Nguon 3</button>
         </div>
         <div class="episode-list">
-          <a href="index.php?page_layout=xemphim&id=<?php echo $movieId; ?>">▶ Tap 1</a>
-          <a href="index.php?page_layout=reviewphim&id=<?php echo $movieId; ?>">▶ Tap 2</a>
+          <a href="index.php?page_layout=xemphim&id=<?php echo $movieId; ?>">â–¶ Tap 1</a>
+          <a href="index.php?page_layout=reviewphim&id=<?php echo $movieId; ?>">â–¶ Tap 2</a>
         </div>
       </section>
 
@@ -267,32 +320,61 @@ $displayRating = $averageRating > 0 ? $averageRating : ($views > 0 ? min(9, max(
 
       <section class="detail-comments" id="detail-comments">
         <div class="comment-title">
-          <h2>💬 Binh luan (<?php echo $reviewCount; ?>)</h2>
+          <h2>Binh luan (<?php echo $reviewCount; ?>)</h2>
           <div>
             <button type="button" class="active">Binh luan</button>
             <button type="button">Danh gia</button>
           </div>
         </div>
-        <p class="comment-login-note">Vui long <a href="login.php">dang nhap</a> de tham gia binh luan.</p>
-        <div class="comment-box">
-          <textarea maxlength="1000" placeholder="Viet binh luan"></textarea>
-          <div>
-            <span>0 / 1000</span>
-            <button type="button">Gui ➜</button>
+
+        <?php if (!$isLoggedIn) { ?>
+          <p class="comment-login-note">Vui long <a href="login.php">dang nhap</a> de tham gia binh luan.</p>
+        <?php } else { ?>
+          <p class="comment-login-note"><?php echo $currentUserReview !== null ? 'Ban da danh gia phim nay. Gui lai de cap nhat noi dung va so sao.' : 'Moi tai khoan duoc luu 1 danh gia cho moi phim.'; ?></p>
+        <?php } ?>
+
+        <?php if ($reviewFlash !== null && !empty($reviewFlash['message'])) { ?>
+          <div class="detail-review-flash <?php echo $reviewFlash['type'] === 'success' ? 'is-success' : 'is-error'; ?>">
+            <?php echo htmlspecialchars($reviewFlash['message']); ?>
           </div>
-        </div>
+        <?php } ?>
+
+        <form class="comment-box" action="xuly_review.php" method="post">
+          <input type="hidden" name="movie_id" value="<?php echo $movieId; ?>">
+          <input type="hidden" name="return_page" value="chitietphim">
+
+          <fieldset class="detail-rating-fieldset" <?php echo !$isLoggedIn ? 'disabled' : ''; ?>>
+            <legend>Danh gia phim</legend>
+            <div class="detail-rating-star-group" role="radiogroup" aria-label="Danh gia phim bang sao">
+              <?php for ($star = 5; $star >= 1; $star--) { ?>
+                <input type="radio" id="detail-rating-star-<?php echo $star; ?>" name="rating" value="<?php echo $star; ?>" <?php echo $existingRatingValue === $star ? 'checked' : ''; ?>>
+                <label for="detail-rating-star-<?php echo $star; ?>" title="<?php echo $star; ?> sao">
+                  <span aria-hidden="true">&#9733;</span>
+                  <span class="sr-only"><?php echo $star; ?> sao</span>
+                </label>
+              <?php } ?>
+            </div>
+            <p class="detail-rating-helper"><?php echo $averageRating > 0 ? 'Diem trung binh hien tai: ' . htmlspecialchars(number_format($averageRating, 1)) . ' / 5 sao.' : 'Phim nay chua co danh gia nao.'; ?></p>
+          </fieldset>
+
+          <textarea name="comment" maxlength="1000" placeholder="Viet binh luan" <?php echo !$isLoggedIn ? 'disabled' : ''; ?> data-detail-comment-input><?php echo htmlspecialchars($existingCommentValue); ?></textarea>
+          <div>
+            <span data-detail-comment-count>0 / 1000</span>
+            <button type="submit" <?php echo !$isLoggedIn ? 'disabled' : ''; ?>><?php echo $currentUserReview !== null ? 'Cap nhat >' : 'Gui >'; ?></button>
+          </div>
+        </form>
 
         <div class="comment-list">
           <?php if (empty($reviews)) { ?>
             <div class="empty-comments">
-              <span>▱</span>
+              <span>&#128172;</span>
               <p>Chua co binh luan nao</p>
             </div>
           <?php } else { ?>
             <?php foreach ($reviews as $review) { ?>
               <article class="review-item">
                 <strong><?php echo htmlspecialchars($review['fullname'] ?? 'Nguoi dung'); ?></strong>
-                <span><?php echo (int) $review['rating']; ?>/10</span>
+                <span><?php echo detail_render_rating_stars(isset($review['rating']) ? (int) $review['rating'] : 0); ?> <?php echo (int) $review['rating']; ?>/5</span>
                 <p><?php echo htmlspecialchars($review['comment']); ?></p>
               </article>
             <?php } ?>
@@ -318,3 +400,23 @@ $displayRating = $averageRating > 0 ? $averageRating : ($views > 0 ? min(9, max(
     </main>
   </div>
 </section>
+
+<script>
+(function() {
+  var commentInput = document.querySelector('[data-detail-comment-input]');
+  var commentCount = document.querySelector('[data-detail-comment-count]');
+
+  function updateCounter() {
+    if (!commentInput || !commentCount) {
+      return;
+    }
+
+    commentCount.textContent = commentInput.value.length + ' / 1000';
+  }
+
+  if (commentInput) {
+    commentInput.addEventListener('input', updateCounter);
+    updateCounter();
+  }
+})();
+</script>
