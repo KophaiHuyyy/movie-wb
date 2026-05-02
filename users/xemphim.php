@@ -169,17 +169,17 @@ if ($movieId > 0) {
 
 if ($movie === null) {
     ?>
-    <section class="watch-page">
-        <div class="watch-container">
-            <div class="watch-empty-state">
-                <span class="watch-empty-icon">&#9655;</span>
-                <h1>Khong tim thay phim</h1>
-                <p>Phim co the da bi xoa hoac duong dan hien tai khong hop le.</p>
-                <a href="index.php?page_layout=home">Quay ve trang chu</a>
-            </div>
+<section class="watch-page">
+    <div class="watch-container">
+        <div class="watch-empty-state">
+            <span class="watch-empty-icon">&#9655;</span>
+            <h1>Khong tim thay phim</h1>
+            <p>Phim co the da bi xoa hoac duong dan hien tai khong hop le.</p>
+            <a href="index.php?page_layout=home">Quay ve trang chu</a>
         </div>
-    </section>
-    <?php
+    </div>
+</section>
+<?php
     return;
 }
 
@@ -346,7 +346,9 @@ $existingRatingValue = $currentUserReview !== null ? (int) $currentUserReview['r
 <section class="watch-page" data-share-url="<?php echo watch_escape($shareUrl); ?>">
     <div class="watch-container">
         <div class="watch-breadcrumb">
-            <a class="watch-back-button" href="<?php echo $detailUrl; ?>" onclick="if (window.history.length > 1) { event.preventDefault(); window.history.back(); }" aria-label="Quay lai">
+            <a class="watch-back-button" href="<?php echo $detailUrl; ?>"
+                onclick="if (window.history.length > 1) { event.preventDefault(); window.history.back(); }"
+                aria-label="Quay lại">
                 <span>&larr;</span>
             </a>
             <div class="watch-breadcrumb-copy">
@@ -358,63 +360,64 @@ $existingRatingValue = $currentUserReview !== null ? (int) $currentUserReview['r
         <div class="watch-player-card">
             <div class="watch-video-frame">
                 <?php if ($videoSource !== null && $isLoggedIn) : ?>
-                    <?php if ($videoSource['type'] === 'youtube' || $videoSource['type'] === 'iframe') : ?>
-                        <iframe
-                            src="<?php echo watch_escape($videoSource['src']); ?>"
-                            title="Xem phim <?php echo $movieTitle; ?>"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                            referrerpolicy="strict-origin-when-cross-origin"
-                            allowfullscreen></iframe>
-                    <?php else : ?>
-                        <video controls preload="metadata" poster="<?php echo watch_escape($posterPath); ?>" data-watch-video>
-                            <source src="<?php echo watch_escape($videoSource['src']); ?>" type="video/mp4">
-                            Trinh duyet cua ban khong ho tro video HTML5.
-                        </video>
-                    <?php endif; ?>
+                <?php if ($videoSource['type'] === 'youtube' || $videoSource['type'] === 'iframe') : ?>
+                <iframe src="<?php echo watch_escape($videoSource['src']); ?>"
+                    title="Xem phim <?php echo $movieTitle; ?>"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
                 <?php else : ?>
-                    <div class="watch-video-placeholder" style="background-image: linear-gradient(180deg, rgba(10, 11, 17, 0.18), rgba(10, 11, 17, 0.92)), url('<?php echo watch_escape($posterPath); ?>');">
-                        <div class="watch-video-placeholder-inner">
-                            <span class="watch-placeholder-play">&#9658;</span>
-                            <?php if (!$isLoggedIn) : ?>
-                                <h2>Vui long dang nhap de xem phim</h2>
-                                <p>Trang xem phim van giu flow cu: ban can dang nhap de mo player va luu lich su dieu huong.</p>
-                                <div class="watch-placeholder-actions">
-                                    <a href="login.php">Dang nhap</a>
-                                    <a class="secondary" href="<?php echo $detailUrl; ?>">Quay lai chi tiet</a>
-                                </div>
-                            <?php else : ?>
-                                <h2>Video hien chua kha dung</h2>
-                                <p>Server xem phim chua duoc cau hinh hop le trong `link1` hoac `link2`.</p>
-                                <div class="watch-placeholder-actions">
-                                    <a href="<?php echo $detailUrl; ?>">Quay lai chi tiet phim</a>
-                                </div>
-                            <?php endif; ?>
+                <video controls preload="metadata" poster="<?php echo watch_escape($posterPath); ?>" data-watch-video>
+                    <source src="<?php echo watch_escape($videoSource['src']); ?>" type="video/mp4">
+                    Trình duyệt của bạn không hỗ trợ video HTML5.
+                </video>
+                <?php endif; ?>
+                <?php else : ?>
+                <div class="watch-video-placeholder"
+                    style="background-image: linear-gradient(180deg, rgba(10, 11, 17, 0.18), rgba(10, 11, 17, 0.92)), url('<?php echo watch_escape($posterPath); ?>');">
+                    <div class="watch-video-placeholder-inner">
+                        <span class="watch-placeholder-play">&#9658;</span>
+                        <?php if (!$isLoggedIn) : ?>
+                        <h2>Vui lòng đăng nhập để xem phim</h2>
+                        <p>Trang xem phim vẫn giữ flow cũ: bạn cần đăng nhập để mở player và lưu lịch sử điều hướng.</p>
+                        <div class="watch-placeholder-actions">
+                            <a href="login.php">Đăng nhập</a>
+                            <a class="secondary" href="<?php echo $detailUrl; ?>">Quay lại chi tiết</a>
                         </div>
+                        <?php else : ?>
+                        <h2>Video hien chua kha dung</h2>
+                        <p>Server xem phim chua duoc cau hinh hop le trong `link1` hoac `link2`.</p>
+                        <div class="watch-placeholder-actions">
+                            <a href="<?php echo $detailUrl; ?>">Quay lại chi tiết phim</a>
+                        </div>
+                        <?php endif; ?>
                     </div>
+                </div>
                 <?php endif; ?>
             </div>
 
             <div class="watch-action-bar">
-                <span class="watch-status-badge<?php echo $videoSource === null ? ' is-upcoming' : ''; ?>"><?php echo watch_escape($statusLabel); ?></span>
-                <a class="watch-action-item<?php echo $watchlistExists ? ' is-active' : ''; ?>" href="<?php echo watch_escape($watchlistUrl); ?>">
+                <span
+                    class="watch-status-badge<?php echo $videoSource === null ? ' is-upcoming' : ''; ?>"><?php echo watch_escape($statusLabel); ?></span>
+                <a class="watch-action-item<?php echo $watchlistExists ? ' is-active' : ''; ?>"
+                    href="<?php echo watch_escape($watchlistUrl); ?>">
                     <span>&hearts;</span>
-                    <?php echo $watchlistExists ? 'Da luu' : 'Yeu thich'; ?>
+                    <?php echo $watchlistExists ? 'Đã lưu' : 'Yêu thích'; ?>
                 </a>
                 <a class="watch-action-item" href="<?php echo watch_escape($watchlistUrl); ?>">
                     <span>+</span>
-                    Them vao
+                    Thêm vào
                 </a>
                 <button class="watch-action-item" type="button" data-skip-intro>
                     <span>OFF</span>
-                    Bo qua gioi thieu
+                    Bỏ qua giới thiệu
                 </button>
                 <a class="watch-action-item" href="<?php echo $detailUrl; ?>">
                     <span>&#9737;</span>
-                    Rap phim
+                    Rạp phim
                 </a>
                 <button class="watch-action-item" type="button" data-share-trigger>
                     <span>&#10148;</span>
-                    Chia se
+                    Chia sẻ
                 </button>
             </div>
         </div>
@@ -424,50 +427,54 @@ $existingRatingValue = $currentUserReview !== null ? (int) $currentUserReview['r
                 <section class="watch-comments">
                     <div class="watch-section-head">
                         <div>
-                            <span class="watch-section-kicker">&#128172; Binh luan</span>
-                            <h2>Binh luan (<?php echo $reviewCount; ?>)</h2>
+                            <span class="watch-section-kicker">&#128172; Bình luận</span>
+                            <h2>Bình luận (<?php echo $reviewCount; ?>)</h2>
                         </div>
                     </div>
 
                     <?php if (!$isLoggedIn) { ?>
-                        <p class="watch-login-hint">Vui long <a href="login.php">dang nhap</a> de tham gia binh luan.</p>
+                    <p class="watch-login-hint">Vui lòng <a href="login.php">đăng nhập</a> để tham gia bình luận.</p>
                     <?php } else { ?>
-                        <p class="watch-login-hint"><?php echo $currentUserReview !== null ? 'Ban da danh gia phim nay. Gui lai de cap nhat noi dung va so sao.' : 'Hay de lai cam nhan sau khi xem phim. Moi tai khoan duoc luu 1 danh gia cho moi phim.'; ?></p>
+                    <p class="watch-login-hint">
+                        <?php echo $currentUserReview !== null ? 'Bạn đã đánh giá phim này. Gửi lại để cập nhật nội dung và số sao.' : 'Hãy để lại cảm nhận sau khi xem phim. Mỗi tài khoản được lưu 1 đánh giá cho mỗi phim.'; ?>
+                    </p>
                     <?php } ?>
 
                     <?php if ($reviewFlash !== null && !empty($reviewFlash['message'])) { ?>
-                        <div class="watch-review-flash <?php echo $reviewFlash['type'] === 'success' ? 'is-success' : 'is-error'; ?>">
-                            <?php echo watch_escape($reviewFlash['message']); ?>
-                        </div>
+                    <div
+                        class="watch-review-flash <?php echo $reviewFlash['type'] === 'success' ? 'is-success' : 'is-error'; ?>">
+                        <?php echo watch_escape($reviewFlash['message']); ?>
+                    </div>
                     <?php } ?>
 
                     <form class="comment-editor" action="xuly_review.php" method="post">
                         <input type="hidden" name="movie_id" value="<?php echo $movieId; ?>">
                         <fieldset class="rating-fieldset" <?php echo !$isLoggedIn ? 'disabled' : ''; ?>>
-                            <legend>Danh gia phim</legend>
+                            <legend>Đánh giá phim</legend>
                             <div class="rating-star-group" role="radiogroup" aria-label="Danh gia phim bang sao">
                                 <?php for ($star = 5; $star >= 1; $star--) { ?>
-                                    <input
-                                        type="radio"
-                                        id="rating-star-<?php echo $star; ?>"
-                                        name="rating"
-                                        value="<?php echo $star; ?>"
-                                        <?php echo $existingRatingValue === $star ? 'checked' : ''; ?>>
-                                    <label for="rating-star-<?php echo $star; ?>" title="<?php echo $star; ?> sao">
-                                        <span aria-hidden="true">&#9733;</span>
-                                        <span class="sr-only"><?php echo $star; ?> sao</span>
-                                    </label>
+                                <input type="radio" id="rating-star-<?php echo $star; ?>" name="rating"
+                                    value="<?php echo $star; ?>"
+                                    <?php echo $existingRatingValue === $star ? 'checked' : ''; ?>>
+                                <label for="rating-star-<?php echo $star; ?>" title="<?php echo $star; ?> sao">
+                                    <span aria-hidden="true">&#9733;</span>
+                                    <span class="sr-only"><?php echo $star; ?> sao</span>
+                                </label>
                                 <?php } ?>
                             </div>
-                            <p class="rating-helper"><?php echo $averageRating > 0 ? 'Diem trung binh hien tai: ' . watch_escape($ratingSummary) . '.' : 'Phim nay chua co danh gia nao.'; ?></p>
+                            <p class="rating-helper">
+                                <?php echo $averageRating > 0 ? 'Điểm trung bình hiện tại: ' . watch_escape($ratingSummary) . '.' : 'Phim nay chua co danh gia nao.'; ?>
+                            </p>
                         </fieldset>
 
-                        <textarea name="comment" maxlength="1000" placeholder="Viet binh luan cua ban ve bo phim nay" <?php echo !$isLoggedIn ? 'disabled' : ''; ?> data-comment-input><?php echo watch_escape($existingCommentValue); ?></textarea>
+                        <textarea name="comment" maxlength="1000" placeholder="Viết bình luận của bạn về bộ phim này..."
+                            rows="4" <?php echo !$isLoggedIn ? 'disabled' : ''; ?>
+                            data-comment-input><?php echo watch_escape($existingCommentValue); ?></textarea>
                         <div class="comment-editor-bar">
                             <div class="comment-editor-actions">
                                 <span data-comment-count>0 / 1000</span>
                                 <button type="submit" <?php echo !$isLoggedIn ? 'disabled' : ''; ?>>
-                                    <?php echo $currentUserReview !== null ? 'Cap nhat &#10148;' : 'Gui &#10148;'; ?>
+                                    <?php echo $currentUserReview !== null ? 'Cập nhật &#10148;' : 'Gửi &#10148;'; ?>
                                 </button>
                             </div>
                         </div>
@@ -475,38 +482,38 @@ $existingRatingValue = $currentUserReview !== null ? (int) $currentUserReview['r
 
                     <div class="comment-list">
                         <?php if (empty($reviews)) { ?>
-                            <div class="comment-empty-state">
-                                <span class="comment-empty-icon">&#128172;</span>
-                                <p>Chua co binh luan nao</p>
-                            </div>
+                        <div class="comment-empty-state">
+                            <span class="comment-empty-icon">&#128172;</span>
+                            <p>Chưa có bình luận nào</p>
+                        </div>
                         <?php } else { ?>
-                            <?php foreach ($reviews as $review) { ?>
-                                <?php
-                                $displayName = !empty($review['fullname']) ? $review['fullname'] : (!empty($review['username']) ? $review['username'] : 'Nguoi dung');
+                        <?php foreach ($reviews as $review) { ?>
+                        <?php
+                                $displayName = !empty($review['fullname']) ? $review['fullname'] : (!empty($review['username']) ? $review['username'] : 'Người dùng');
                                 $initial = mb_strtoupper(mb_substr($displayName, 0, 1));
                                 ?>
-                                <article class="watch-comment-item">
-                                    <div class="watch-comment-avatar"><?php echo watch_escape($initial); ?></div>
-                                    <div class="watch-comment-body">
-                                        <div class="watch-comment-meta">
-                                            <strong><?php echo watch_escape($displayName); ?></strong>
-                                            <span><?php echo watch_format_datetime($review['review_date']); ?></span>
-                                        </div>
-                                        <div class="watch-comment-rating">
-                                            <span>
-                                                <?php
+                        <article class="watch-comment-item">
+                            <div class="watch-comment-avatar"><?php echo watch_escape($initial); ?></div>
+                            <div class="watch-comment-body">
+                                <div class="watch-comment-meta">
+                                    <strong><?php echo watch_escape($displayName); ?></strong>
+                                    <span><?php echo watch_format_datetime($review['review_date']); ?></span>
+                                </div>
+                                <div class="watch-comment-rating">
+                                    <span>
+                                        <?php
                                                 $reviewRating = isset($review['rating']) ? (int) $review['rating'] : 0;
                                                 for ($star = 1; $star <= 5; $star++) {
                                                     echo $star <= $reviewRating ? '&#9733;' : '&#9734;';
                                                 }
                                                 ?>
-                                                <?php echo $reviewRating; ?>/5
-                                            </span>
-                                        </div>
-                                        <p><?php echo nl2br(watch_escape($review['comment'])); ?></p>
-                                    </div>
-                                </article>
-                            <?php } ?>
+                                        <?php echo $reviewRating; ?>/5
+                                    </span>
+                                </div>
+                                <p><?php echo nl2br(watch_escape($review['comment'])); ?></p>
+                            </div>
+                        </article>
+                        <?php } ?>
                         <?php } ?>
                     </div>
                 </section>
@@ -516,7 +523,7 @@ $existingRatingValue = $currentUserReview !== null ? (int) $currentUserReview['r
                 <div class="watch-side-card watch-side-card-actions">
                     <div class="watch-side-tabs">
                         <span><i>&#9733;</i> <?php echo $reviewCount; ?> review</span>
-                        <span><i>&#128172;</i> <?php echo $reviewCount; ?> binh luan</span>
+                        <span><i>&#128172;</i> <?php echo $reviewCount; ?> bình luận</span>
                         <strong><?php echo watch_escape($ratingBadge); ?></strong>
                     </div>
                 </div>
@@ -524,41 +531,42 @@ $existingRatingValue = $currentUserReview !== null ? (int) $currentUserReview['r
                 <div class="watch-side-card">
                     <div class="watch-section-head">
                         <div>
-                            <span class="watch-section-kicker">Thong tin phim</span>
+                            <span class="watch-section-kicker">Thông tin phim</span>
                             <h2><?php echo $movieTitle; ?></h2>
                         </div>
                     </div>
                     <dl class="watch-info-list">
                         <div>
-                            <dt>Quoc gia</dt>
+                            <dt>Quốc gia</dt>
                             <dd><?php echo $movieCountry; ?></dd>
                         </div>
                         <div>
-                            <dt>Nam phat hanh</dt>
+                            <dt>Năm phát hành</dt>
                             <dd><?php echo $movieYear; ?></dd>
                         </div>
                         <div>
-                            <dt>Ngon ngu</dt>
+                            <dt>Ngôn ngữ</dt>
                             <dd><?php echo $movieLanguage; ?></dd>
                         </div>
                         <div>
-                            <dt>The loai</dt>
+                            <dt>Thể loại</dt>
                             <dd><?php echo $genreSummary; ?></dd>
                         </div>
                         <div>
-                            <dt>Luot xem</dt>
+                            <dt>Lượt xem</dt>
                             <dd><?php echo number_format($movieViews); ?></dd>
                         </div>
                         <div>
-                            <dt>Ngay them</dt>
+                            <dt>Ngày thêm</dt>
                             <dd><?php echo $movieAddedDate; ?></dd>
                         </div>
                     </dl>
                     <div class="watch-cast-placeholder">
                         <div class="watch-cast-avatar">IT</div>
                         <div>
-                            <strong>Dien vien</strong>
-                            <p>Du lieu dien vien chua co trong schema hien tai, sidebar dang uu tien thong tin phim that tu database.</p>
+                            <strong>Diễn viên</strong>
+                            <p>Dữ liệu diễn viên chưa có trong schema hiện tại, sidebar đang ưu tiên thông tin phim thực
+                                tế từ database.</p>
                         </div>
                     </div>
                 </div>
@@ -566,20 +574,26 @@ $existingRatingValue = $currentUserReview !== null ? (int) $currentUserReview['r
                 <div class="watch-side-card">
                     <div class="watch-section-head">
                         <div>
-                            <span class="watch-section-kicker">De xuat cho ban</span>
-                            <h2>Phim cung gu</h2>
+                            <span class="watch-section-kicker">Đề xuất cho bạn</span>
+                            <h2>Phim cùng gu</h2>
                         </div>
                     </div>
                     <div class="recommend-list">
                         <?php foreach ($recommendations as $recommendMovie) { ?>
-                            <a class="recommend-item" href="index.php?page_layout=chitietphim&id=<?php echo (int) $recommendMovie['movie_id']; ?>">
-                                <img class="recommend-poster" src="../movies_admin/hinhanhphim/<?php echo watch_escape($recommendMovie['img']); ?>" alt="<?php echo watch_escape($recommendMovie['title']); ?>">
-                                <span class="recommend-copy">
-                                    <strong><?php echo watch_escape($recommendMovie['title']); ?></strong>
-                                    <small><?php echo !empty($recommendMovie['language']) ? watch_escape($recommendMovie['language']) : 'Dang cap nhat'; ?></small>
-                                    <em>T16 / <?php echo !empty($recommendMovie['release_year']) ? watch_escape($recommendMovie['release_year']) : 'Full'; ?> / <?php echo !empty($recommendMovie['country_name']) ? watch_escape($recommendMovie['country_name']) : 'Online'; ?></em>
-                                </span>
-                            </a>
+                        <a class="recommend-item"
+                            href="index.php?page_layout=chitietphim&id=<?php echo (int) $recommendMovie['movie_id']; ?>">
+                            <img class="recommend-poster"
+                                src="../movies_admin/hinhanhphim/<?php echo watch_escape($recommendMovie['img']); ?>"
+                                alt="<?php echo watch_escape($recommendMovie['title']); ?>">
+                            <span class="recommend-copy">
+                                <strong><?php echo watch_escape($recommendMovie['title']); ?></strong>
+                                <small><?php echo !empty($recommendMovie['language']) ? watch_escape($recommendMovie['language']) : 'Đang cập nhật'; ?></small>
+                                <em>T16 /
+                                    <?php echo !empty($recommendMovie['release_year']) ? watch_escape($recommendMovie['release_year']) : 'Full'; ?>
+                                    /
+                                    <?php echo !empty($recommendMovie['country_name']) ? watch_escape($recommendMovie['country_name']) : 'Online'; ?></em>
+                            </span>
+                        </a>
                         <?php } ?>
                     </div>
                 </div>
@@ -594,7 +608,7 @@ $existingRatingValue = $currentUserReview !== null ? (int) $currentUserReview['r
         </a>
         <a class="mini-bottom-brand" href="index.php?page_layout=home" aria-label="ITMOVIES">
             <strong>ITMOVIES</strong>
-            <small>Phim hay moi ngay</small>
+            <small>Phim hay mỗi ngày</small>
         </a>
         <a href="index.php?page_layout=timkiemphim" aria-label="Tim kiem">
             <span>&#8981;</span>
@@ -611,7 +625,8 @@ $existingRatingValue = $currentUserReview !== null ? (int) $currentUserReview['r
     var commentInput = document.querySelector('[data-comment-input]');
     var commentCount = document.querySelector('[data-comment-count]');
     var shareButton = document.querySelector('[data-share-trigger]');
-    var shareUrl = document.querySelector('.watch-page') ? document.querySelector('.watch-page').getAttribute('data-share-url') : window.location.href;
+    var shareUrl = document.querySelector('.watch-page') ? document.querySelector('.watch-page').getAttribute(
+        'data-share-url') : window.location.href;
     var skipIntroButton = document.querySelector('[data-skip-intro]');
     var html5Video = document.querySelector('[data-watch-video]');
 
@@ -655,14 +670,14 @@ $existingRatingValue = $currentUserReview !== null ? (int) $currentUserReview['r
 
             if (navigator.clipboard && navigator.clipboard.writeText) {
                 navigator.clipboard.writeText(shareUrl).then(function() {
-                    alert('Da sao chep lien ket phim.');
+                    alert('Đã sao chép liên kết phim.');
                 }).catch(function() {
-                    window.prompt('Sao chep lien ket phim:', shareUrl);
+                    window.prompt('Sao chép liên kết phim:', shareUrl);
                 });
                 return;
             }
 
-            window.prompt('Sao chep lien ket phim:', shareUrl);
+            window.prompt('Sao chép liên kết phim:', shareUrl);
         });
     }
 
@@ -674,7 +689,7 @@ $existingRatingValue = $currentUserReview !== null ? (int) $currentUserReview['r
                 return;
             }
 
-            alert('Tinh nang bo qua gioi thieu hien chi ho tro voi video HTML5.');
+            alert('Tính năng bo qua giới thiệu hiện chỉ hỗ trợ với video HTML5.');
         });
     }
 

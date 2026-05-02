@@ -411,7 +411,7 @@ $displayEnd = $totalCountries > 0 ? min($totalCountries, $offset + count($countr
                     <span class="admin-nav-icon">&#9733;</span>
                     <span>Đánh giá</span>
                 </a>
-                <a class="admin-nav-item" href="index.php#top-movies">
+                <a class="admin-nav-item" href="index.php?page_layout=phan_tich">
                     <span class="admin-nav-icon">&#128200;</span>
                     <span>Phân tích</span>
                 </a>
