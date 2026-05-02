@@ -127,6 +127,10 @@ img {
   transition: 0.2s ease;
 }
 
+.dis-block {
+  display: block;
+}
+
 .main-nav > a:hover,
 .main-nav > a.active,
 .nav-link:hover {

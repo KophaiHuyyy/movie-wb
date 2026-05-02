@@ -24,9 +24,10 @@ function renderMovieCard($movie, $variant = 'poster')
         <span class="movie-card-overlay"></span>
         <div class="movie-hover-details">
             <div class="movie-hover-actions">
-                <a class="hover-play" href="index.php?page_layout=xemphim&id=<?php echo $movieId; ?>">&#9658; Xem ngay</a>
-                <a class="hover-like" href="<?php echo $watchLaterUrl; ?>">&#9829; Thich</a>
-                <a class="hover-info" href="index.php?page_layout=chitietphim&id=<?php echo $movieId; ?>">i Chi tiet</a>
+                <a class="hover-play" href="index.php?page_layout=xemphim&id=<?php echo $movieId; ?>">&#9658; Xem
+                    ngay</a>
+                <a class="hover-like" href="<?php echo $watchLaterUrl; ?>">&#9829; Thích</a>
+                <a class="hover-info" href="index.php?page_layout=chitietphim&id=<?php echo $movieId; ?>">Chi tiết</a>
             </div>
             <div class="movie-hover-badges">
                 <span>IMDb <?php echo $views > 0 ? min(9, max(5, $views + 4)) : 6; ?></span>
@@ -130,7 +131,7 @@ $heroWelcome = isset($_SESSION['fullname']) ? htmlspecialchars($_SESSION['fullna
         </div>
         <div class="hero-content">
             <div class="hero-copy">
-                <span class="hero-kicker">Diem den dau tien sau khi dang nhap</span>
+                <span class="hero-kicker">Điểm đến đầu tiên sau khi đăng nhập</span>
                 <h1><?php echo $heroTitle; ?></h1>
                 <p class="hero-description"><?php echo $heroDescription; ?></p>
                 <div class="hero-stats">

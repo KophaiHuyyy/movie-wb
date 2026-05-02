@@ -168,7 +168,7 @@ if ($movieId > 0) {
 }
 
 if ($movie === null) {
-    ?>
+?>
 <section class="watch-page">
     <div class="watch-container">
         <div class="watch-empty-state">
@@ -320,25 +320,25 @@ $videoSource = watch_resolve_video_source($movie['link1'] ?? "", $movie['link2']
 $posterFile = !empty($movie['img']) ? $movie['img'] : 'hinh0.jpg';
 $posterPath = "../movies_admin/hinhanhphim/" . $posterFile;
 $movieTitle = watch_escape($movie['title']);
-$movieDescription = !empty($movie['description']) ? watch_escape($movie['description']) : 'Noi dung phim dang duoc cap nhat.';
-$movieLanguage = !empty($movie['language']) ? watch_escape($movie['language']) : 'Dang cap nhat';
-$movieCountry = !empty($movie['country_name']) ? watch_escape($movie['country_name']) : 'Dang cap nhat';
+$movieDescription = !empty($movie['description']) ? watch_escape($movie['description']) : 'Nội dung phim đang được cập nhật.';
+$movieLanguage = !empty($movie['language']) ? watch_escape($movie['language']) : 'Đang cập nhật';
+$movieCountry = !empty($movie['country_name']) ? watch_escape($movie['country_name']) : 'Đang cập nhật';
 $movieYear = !empty($movie['release_year']) ? watch_escape($movie['release_year']) : 'N/A';
 $movieViews = isset($movie['view']) ? (int) $movie['view'] : 0;
-$movieAddedDate = !empty($movie['date_add']) ? watch_escape($movie['date_add']) : 'Dang cap nhat';
+$movieAddedDate = !empty($movie['date_add']) ? watch_escape($movie['date_add']) : 'Đang cập nhật';
 $watchlistUrl = $isLoggedIn
     ? "index.php?page_layout=xemsau&id=" . $movieId . "&iduser=" . $currentUserId
     : "login.php";
 $detailUrl = "index.php?page_layout=chitietphim&id=" . $movieId;
 $shareUrl = "http://localhost/WebsiteReviewPhim/users/index.php?page_layout=xemphim&id=" . $movieId;
-$statusLabel = $videoSource === null ? "Phim sap ra mat" : "Dang chieu";
-$ratingBadge = $averageRating > 0 ? number_format($averageRating, 1) . "/5" : "Chua co";
-$ratingSummary = $averageRating > 0 ? number_format($averageRating, 1) . " / 5 sao" : "Chua co danh gia";
+$statusLabel = $videoSource === null ? "Phim sắp ra mắt" : "Đang chiếu";
+$ratingBadge = $averageRating > 0 ? number_format($averageRating, 1) . "/5" : "Chưa có";
+$ratingSummary = $averageRating > 0 ? number_format($averageRating, 1) . " / 5 sao" : "Chưa có đánh giá";
 $genreNames = array();
 foreach ($genres as $genre) {
     $genreNames[] = $genre['ten_theloai'];
 }
-$genreSummary = !empty($genreNames) ? watch_escape(implode(' / ', $genreNames)) : 'Dang cap nhat the loai';
+$genreSummary = !empty($genreNames) ? watch_escape(implode(' / ', $genreNames)) : 'Đang cập nhật thể loại';
 $existingCommentValue = $currentUserReview !== null && !empty($currentUserReview['comment']) ? $currentUserReview['comment'] : '';
 $existingRatingValue = $currentUserReview !== null ? (int) $currentUserReview['rating'] : 0;
 ?>
@@ -352,7 +352,7 @@ $existingRatingValue = $currentUserReview !== null ? (int) $currentUserReview['r
                 <span>&larr;</span>
             </a>
             <div class="watch-breadcrumb-copy">
-                <span class="watch-breadcrumb-label">Dang phat</span>
+                <span class="watch-breadcrumb-label">Đang phát</span>
                 <h1>Xem phim <?php echo $movieTitle; ?></h1>
             </div>
         </div>
@@ -463,7 +463,7 @@ $existingRatingValue = $currentUserReview !== null ? (int) $currentUserReview['r
                                 <?php } ?>
                             </div>
                             <p class="rating-helper">
-                                <?php echo $averageRating > 0 ? 'Điểm trung bình hiện tại: ' . watch_escape($ratingSummary) . '.' : 'Phim nay chua co danh gia nao.'; ?>
+                                <?php echo $averageRating > 0 ? 'Điểm trung bình hiện tại: ' . watch_escape($ratingSummary) . '.' : 'Phim này chưa có đánh giá nào.'; ?>
                             </p>
                         </fieldset>
 

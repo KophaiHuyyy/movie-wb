@@ -2,7 +2,7 @@
 include_once "cauhinh.php";
 
 if (session_status() === PHP_SESSION_NONE) {
-  session_start();
+    session_start();
 }
 
 $currentPage = isset($_GET['page_layout']) ? $_GET['page_layout'] : "home";
@@ -12,9 +12,9 @@ $fullname = $isLoggedIn ? $_SESSION['fullname'] : "Khach";
 $genreItems = array();
 $listtheloai = $connect->query("SELECT * FROM genres ORDER BY ten_theloai ASC");
 if ($listtheloai) {
-  while ($rowtl = $listtheloai->fetch_array(MYSQLI_ASSOC)) {
-    $genreItems[] = $rowtl;
-  }
+    while ($rowtl = $listtheloai->fetch_array(MYSQLI_ASSOC)) {
+        $genreItems[] = $rowtl;
+    }
 }
 ?>
 <!DOCTYPE html>
@@ -30,7 +30,8 @@ if ($listtheloai) {
     <?php } ?>
 </head>
 
-<body class="<?php echo $currentPage === 'home' ? 'is-home' : 'is-inner'; ?> page-<?php echo htmlspecialchars($currentPage); ?>">
+<body
+    class="<?php echo $currentPage === 'home' ? 'is-home' : 'is-inner'; ?> page-<?php echo htmlspecialchars($currentPage); ?>">
     <div class="site-bg"></div>
     <header class="site-header">
         <div class="topbar">
@@ -38,7 +39,7 @@ if ($listtheloai) {
                 <img class="brand-logo" src="anhnen/IT (4).png" alt="ITmovie">
                 <div class="brand-copy">
                     <span class="brand-title">ITmovie</span>
-                    <span class="brand-subtitle">Review va xem phim moi ngay</span>
+                    <span class="brand-subtitle">Review và xem phim mỗi ngày</span>
                 </div>
             </a>
 
@@ -50,9 +51,9 @@ if ($listtheloai) {
 
             <nav class="main-nav" id="mainNav">
                 <a href="index.php?page_layout=home"
-                    class="<?php echo $currentPage === 'home' ? 'active' : ''; ?>">Trang chu</a>
+                    class="<?php echo $currentPage === 'home' ? 'active' : ''; ?>">Trang chủ</a>
                 <div class="nav-dropdown">
-                    <a href="#" class="nav-link">The loai</a>
+                    <a href="#" class="nav-link dis-block">Thể loại</a>
                     <div class="dropdown-panel">
                         <?php foreach ($genreItems as $genreItem) { ?>
                         <a href="index.php?page_layout=theloai&id=<?php echo (int) $genreItem['theloai_id']; ?>">
@@ -61,7 +62,7 @@ if ($listtheloai) {
                         <?php } ?>
                     </div>
                 </div>
-                <a href="index.php?page_layout=timkiemphim">Tim kiem</a>
+                <a href="index.php?page_layout=timkiemphim">Tìm kiếm</a>
                 <a href="index.php?page_layout=danhsachxemsau">Xem sau</a>
             </nav>
 
@@ -69,19 +70,19 @@ if ($listtheloai) {
                 <form class="search-form" action="index.php" method="get">
                     <input type="hidden" name="page_layout" value="timkiemphim">
                     <input type="text" name="txttimkiem" class="txttimkiem"
-                        placeholder="Tim ten phim, noi dung, the loai...">
-                    <button type="submit">Tim</button>
+                        placeholder="Tìm tên phim, nội dung, thể loại...">
+                    <button type="submit">Tìm</button>
                 </form>
 
                 <?php if ($isLoggedIn) { ?>
                 <a class="user-pill"
                     href="index.php?page_layout=nguoidung&id=<?php echo (int) $_SESSION['user_id']; ?>">
-                    Xin chao, <?php echo htmlspecialchars($fullname); ?>
+                    Xin chào, <?php echo htmlspecialchars($fullname); ?>
                 </a>
                 <a class="logout-btn" href="logout.php"
-                    onclick="return confirm('Ban co chac chan muon DANG XUAT khong?')">Dang xuat</a>
+                    onclick="return confirm('Bạn có chắc chắn muốn ĐĂNG XUẤT không?')">Đăng xuất</a>
                 <?php } else { ?>
-                <a class="login-btn" href="login.php">Dang nhap</a>
+                <a class="login-btn" href="login.php">Đăng nhập</a>
                 <?php } ?>
             </div>
         </div>
@@ -95,25 +96,26 @@ if ($listtheloai) {
         <div class="footer-grid">
             <div>
                 <h3>ITMOVIES</h3>
-                <p>Phim hay moi ngay</p>
-                <p>ITMOVIES cung cap trai nghiem xem phim truc tuyen voi giao dien hien dai, toc do nhanh va kho phim da dang.</p>
+                <p>Phim hay mỗi ngày</p>
+                <p>ITMOVIES cung cấp trải nghiệm xem phim trực tuyến với giao diện hiện đại, tốc độ nhanh và kho phim đa
+                    dạng.</p>
             </div>
             <div>
-                <h3>Dieu huong</h3>
-                <a href="index.php?page_layout=home">Hoi-Dap</a>
-                <a href="index.php?page_layout=home">Chinh sach bao mat</a>
-                <a href="index.php?page_layout=home">Dieu khoan su dung</a>
+                <h3>Điều hướng</h3>
+                <a href="index.php?page_layout=home">Hỏi-Đáp</a>
+                <a href="index.php?page_layout=home">Chính sách bảo mật</a>
+                <a href="index.php?page_layout=home">Điều khoản sử dụng</a>
             </div>
             <div>
-                <h3>Kham pha</h3>
-                <a href="index.php?page_layout=home">Gioi thieu</a>
-                <a href="index.php?page_layout=timkiemphim">Tim phim</a>
-                <a href="index.php?page_layout=danhsachxemsau">Lien he</a>
+                <h3>Khám phá</h3>
+                <a href="index.php?page_layout=home">Giới thiệu</a>
+                <a href="index.php?page_layout=timkiemphim">Tìm phim</a>
+                <a href="index.php?page_layout=danhsachxemsau">Liên hệ</a>
             </div>
         </div>
         <div class="footer-bottom">
             <span>&copy; 2026 ITMOVIES</span>
-            <span>Kho phim online cho trai nghiem xem nhanh va toi gian</span>
+            <span>Kho phim online cho trải nghiệm xem nhanh và tiện lợi</span>
         </div>
     </footer>
 

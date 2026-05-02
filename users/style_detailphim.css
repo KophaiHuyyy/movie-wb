@@ -490,6 +490,10 @@
   border-bottom: 1px solid var(--detail-line);
 }
 
+.space-top {
+  padding-top: 12px !important;
+}
+
 .detail-rating-fieldset legend {
   padding: 0;
   color: #ffffff;
