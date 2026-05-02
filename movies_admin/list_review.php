@@ -400,13 +400,15 @@ $displayEnd = $filteredTotal > 0 ? min($filteredTotal, $offset + count($reviews)
 ?>
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quan ly danh gia | ITMOVIES Admin</title>
+    <title>Quản lý danh giá | ITMOVIES Admin</title>
     <link rel="stylesheet" href="style_admin.css">
 </head>
+
 <body>
     <div class="admin-shell">
         <aside class="admin-sidebar">
@@ -421,15 +423,15 @@ $displayEnd = $filteredTotal > 0 ? min($filteredTotal, $offset + count($reviews)
             <nav class="admin-nav">
                 <a class="admin-nav-item" href="index.php">
                     <span class="admin-nav-icon">&#9638;</span>
-                    <span>Tong quan</span>
+                    <span>Tổng quan</span>
                 </a>
                 <a class="admin-nav-item" href="index.php?page_layout=listfilm">
                     <span class="admin-nav-icon">&#127916;</span>
-                    <span>Quan ly phim</span>
+                    <span>Quản lý phim</span>
                 </a>
                 <a class="admin-nav-item" href="index.php?page_layout=list_theloai">
                     <span class="admin-nav-icon">&#9673;</span>
-                    <span>The loai</span>
+                    <span>Thể loại</span>
                 </a>
                 <a class="admin-nav-item" href="index.php?page_layout=list_theloai_phim">
                     <span class="admin-nav-icon">&#8644;</span>
@@ -437,30 +439,31 @@ $displayEnd = $filteredTotal > 0 ? min($filteredTotal, $offset + count($reviews)
                 </a>
                 <a class="admin-nav-item" href="index.php?page_layout=themquocgia">
                     <span class="admin-nav-icon">&#127760;</span>
-                    <span>Quoc gia</span>
+                    <span>Quốc gia</span>
                 </a>
                 <a class="admin-nav-item" href="index.php?page_layout=list_user">
                     <span class="admin-nav-icon">&#128101;</span>
-                    <span>Nguoi dung</span>
+                    <span>Người dùng</span>
                 </a>
                 <a class="admin-nav-item is-active has-indicator" href="index.php?page_layout=list_review">
                     <span class="admin-nav-icon">&#9733;</span>
-                    <span>Danh gia</span>
+                    <span>Đánh giá</span>
                 </a>
                 <a class="admin-nav-item" href="index.php#top-movies">
                     <span class="admin-nav-icon">&#128200;</span>
-                    <span>Phan tich</span>
+                    <span>Phân tích</span>
                 </a>
             </nav>
 
             <div class="admin-sidebar-footer">
                 <a class="admin-nav-item" href="index.php?page_layout=listfilm">
                     <span class="admin-nav-icon">&#9881;</span>
-                    <span>Cai dat</span>
+                    <span>Cài đặt</span>
                 </a>
-                <a class="admin-logout" href="logout.php" onclick="return confirm('Ban co chac chan muon dang xuat khong?')">
+                <a class="admin-logout" href="logout.php"
+                    onclick="return confirm('Ban co chac chan muon dang xuat khong?')">
                     <span class="admin-nav-icon">&#10162;</span>
-                    <span>Dang xuat</span>
+                    <span>Đăng xuất</span>
                 </a>
             </div>
         </aside>
@@ -470,16 +473,17 @@ $displayEnd = $filteredTotal > 0 ? min($filteredTotal, $offset + count($reviews)
                 <form class="admin-search admin-search-wide" action="index.php" method="get">
                     <input type="hidden" name="page_layout" value="list_review">
                     <?php if ($ratingFilter !== "all") { ?>
-                        <input type="hidden" name="rating" value="<?php echo admin_escape($ratingFilter); ?>">
+                    <input type="hidden" name="rating" value="<?php echo admin_escape($ratingFilter); ?>">
                     <?php } ?>
                     <?php if ($statusFilter !== "all") { ?>
-                        <input type="hidden" name="status" value="<?php echo admin_escape($statusFilter); ?>">
+                    <input type="hidden" name="status" value="<?php echo admin_escape($statusFilter); ?>">
                     <?php } ?>
                     <?php if ($movieFilter > 0) { ?>
-                        <input type="hidden" name="movie_id" value="<?php echo (int) $movieFilter; ?>">
+                    <input type="hidden" name="movie_id" value="<?php echo (int) $movieFilter; ?>">
                     <?php } ?>
                     <span class="admin-search-icon">&#9906;</span>
-                    <input type="search" name="keyword" value="<?php echo admin_escape($keyword); ?>" placeholder="Tim kiem danh gia...">
+                    <input type="search" name="keyword" value="<?php echo admin_escape($keyword); ?>"
+                        placeholder="Tim kiem danh gia...">
                 </form>
 
                 <div class="admin-topbar-actions">
@@ -498,14 +502,14 @@ $displayEnd = $filteredTotal > 0 ? min($filteredTotal, $offset + count($reviews)
             <section class="review-header">
                 <div class="review-header-copy">
                     <p class="review-kicker">Review moderation</p>
-                    <h1>Quan ly danh gia</h1>
-                    <p>Kiem duyet va quan ly cac phan hoi tu nguoi xem phim.</p>
+                    <h1>Quản lý đánh giá</h1>
+                    <p>Kiểm duyệt và quản lý các phản hồi từ người xem phim.</p>
                 </div>
 
                 <div class="review-header-actions">
                     <button class="admin-secondary-btn review-filter-toggle" type="button" data-review-filter-toggle>
                         <span>&#9776;</span>
-                        <span>Bo loc</span>
+                        <span>Bộ lọc</span>
                     </button>
                 </div>
             </section>
@@ -513,85 +517,89 @@ $displayEnd = $filteredTotal > 0 ? min($filteredTotal, $offset + count($reviews)
             <section class="review-stats-grid">
                 <article class="review-stat-card review-stat-card-rose admin-card">
                     <div class="review-stat-head">
-                        <span class="review-stat-label">Tong danh gia</span>
+                        <span class="review-stat-label">Tổng đánh giá</span>
                     </div>
                     <div class="review-stat-body">
                         <strong><?php echo admin_escape(admin_format_number($totalReviews)); ?></strong>
-                        <small>Tu bang reviews</small>
+                        <small>Từ bảng reviews</small>
                     </div>
                 </article>
 
                 <article class="review-stat-card review-stat-card-amber admin-card">
                     <div class="review-stat-head">
-                        <span class="review-stat-label">Dang hien thi</span>
+                        <span class="review-stat-label">Đang hiển thị</span>
                     </div>
                     <div class="review-stat-body">
                         <strong><?php echo admin_escape(admin_format_number($visibleReviews)); ?></strong>
-                        <small>Review cong khai tren user site</small>
+                        <small>Review công khai trên user site</small>
                     </div>
                 </article>
 
                 <article class="review-stat-card review-stat-card-gold admin-card">
                     <div class="review-stat-head">
-                        <span class="review-stat-label">Da an</span>
+                        <span class="review-stat-label">Đã ẩn</span>
                     </div>
                     <div class="review-stat-body">
                         <strong><?php echo admin_escape(admin_format_number($hiddenReviews)); ?></strong>
-                        <small>Khong xuat hien tren user site</small>
+                        <small>Không xuất hiện trên user site</small>
                     </div>
                 </article>
 
                 <article class="review-stat-card review-stat-card-danger admin-card">
                     <div class="review-stat-head">
-                        <span class="review-stat-label">Diem trung binh</span>
+                        <span class="review-stat-label">Điểm trung bình</span>
                     </div>
                     <div class="review-stat-body">
                         <strong><?php echo $averageRating > 0 ? admin_escape(admin_format_decimal($averageRating)) : "0.0"; ?></strong>
-                        <div class="rating-stars rating-stars-summary"><?php echo admin_render_rating_stars((int) round($averageRating)); ?></div>
+                        <div class="rating-stars rating-stars-summary">
+                            <?php echo admin_render_rating_stars((int) round($averageRating)); ?></div>
                     </div>
                 </article>
             </section>
 
             <?php if ($flashMessage !== "") { ?>
-                <div class="account-form-alert <?php echo in_array($notice, array("deleted", "hidden", "shown"), true) ? "account-form-alert-success" : "account-form-alert-error"; ?>">
-                    <?php echo admin_escape($flashMessage); ?>
-                </div>
+            <div
+                class="account-form-alert <?php echo in_array($notice, array("deleted", "hidden", "shown"), true) ? "account-form-alert-success" : "account-form-alert-error"; ?>">
+                <?php echo admin_escape($flashMessage); ?>
+            </div>
             <?php } ?>
 
             <section class="review-filter-bar admin-card" id="reviewFilterPanel">
                 <form class="review-filter-form" action="index.php" method="get">
                     <input type="hidden" name="page_layout" value="list_review">
                     <?php if ($keyword !== "") { ?>
-                        <input type="hidden" name="keyword" value="<?php echo admin_escape($keyword); ?>">
+                    <input type="hidden" name="keyword" value="<?php echo admin_escape($keyword); ?>">
                     <?php } ?>
 
                     <label class="review-filter-select">
                         <span>Rating</span>
                         <select name="rating" onchange="this.form.submit()">
-                            <option value="all" <?php echo $ratingFilter === "all" ? "selected" : ""; ?>>Tat ca</option>
+                            <option value="all" <?php echo $ratingFilter === "all" ? "selected" : ""; ?>>Tất cả</option>
                             <option value="5" <?php echo $ratingFilter === "5" ? "selected" : ""; ?>>5 sao</option>
                             <option value="4" <?php echo $ratingFilter === "4" ? "selected" : ""; ?>>4 sao</option>
-                            <option value="3" <?php echo $ratingFilter === "3" ? "selected" : ""; ?>>3 sao tro xuong</option>
+                            <option value="3" <?php echo $ratingFilter === "3" ? "selected" : ""; ?>>3 sao tro xuong
+                            </option>
                         </select>
                     </label>
 
                     <label class="review-filter-select">
-                        <span>Trang thai</span>
+                        <span>Trạng thái</span>
                         <select name="status" onchange="this.form.submit()">
-                            <option value="all" <?php echo $statusFilter === "all" ? "selected" : ""; ?>>Tat ca</option>
-                            <option value="hien" <?php echo $statusFilter === "hien" ? "selected" : ""; ?>>Hien</option>
-                            <option value="an" <?php echo $statusFilter === "an" ? "selected" : ""; ?>>An</option>
+                            <option value="all" <?php echo $statusFilter === "all" ? "selected" : ""; ?>>Tất cả</option>
+                            <option value="hien" <?php echo $statusFilter === "hien" ? "selected" : ""; ?>>Hiện</option>
+                            <option value="an" <?php echo $statusFilter === "an" ? "selected" : ""; ?>>Ẩn</option>
                         </select>
                     </label>
 
                     <label class="review-filter-select review-filter-select-wide">
                         <span>Phim</span>
                         <select name="movie_id" onchange="this.form.submit()">
-                            <option value="0">Tat ca phim</option>
+                            <option value="0">Tất cả phim</option>
                             <?php foreach ($movieOptions as $movieOption) { ?>
-                                <option value="<?php echo (int) $movieOption["movie_id"]; ?>" <?php echo $movieFilter === (int) $movieOption["movie_id"] ? "selected" : ""; ?>>
-                                    <?php echo admin_escape($movieOption["title"]); ?>
-                                </option>
+                            <option value="<?php echo (int) $movieOption["movie_id"]; ?>"
+                                <?php echo $movieFilter === (int) $movieOption["movie_id"] ? "selected" : ""; ?>>
+                                <?php echo admin_escape($movieOption["title"]); ?>
+                            </option>
                             <?php } ?>
                         </select>
                     </label>
@@ -599,30 +607,32 @@ $displayEnd = $filteredTotal > 0 ? min($filteredTotal, $offset + count($reviews)
                 </form>
 
                 <div class="review-filter-meta">
-                    <p>Trang thai duoc luu that trong cot <code>reviews.is_hidden</code>. Review bi an van ton tai trong DB nhung khong duoc tinh vao danh sach va diem trung binh cong khai.</p>
-                    <span>Hien thi <?php echo admin_escape($displayStart); ?>-<?php echo admin_escape($displayEnd); ?> tren <?php echo admin_escape(admin_format_number($filteredTotal)); ?> ket qua</span>
+                    <p>Trạng thái được lưu trữ trong cột <code>reviews.is_hidden</code>. Review bị ẩn vẫn tồn tại
+                        trong DB nhưng không được tính vào danh sách và điểm trung bình công khai.</p>
+                    <span>Hiển thị <?php echo admin_escape($displayStart); ?>-<?php echo admin_escape($displayEnd); ?>
+                        trên <?php echo admin_escape(admin_format_number($filteredTotal)); ?> kết quả</span>
                 </div>
             </section>
 
             <section class="review-table-card admin-card">
                 <?php if (empty($reviews)) { ?>
-                    <div class="admin-empty-state">Khong tim thay danh gia phu hop voi bo loc hien tai.</div>
+                <div class="admin-empty-state">Không tìm thấy đánh giá phù hợp với bộ lọc hiện tại.</div>
                 <?php } else { ?>
-                    <div class="review-table-scroll">
-                        <table class="review-table">
-                            <thead>
-                                <tr>
-                                    <th>Phim</th>
-                                    <th>Nguoi dung</th>
-                                    <th>Danh gia</th>
-                                    <th>Binh luan</th>
-                                    <th>Trang thai</th>
-                                    <th>Thao tac</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php foreach ($reviews as $review) { ?>
-                                    <?php
+                <div class="review-table-scroll">
+                    <table class="review-table">
+                        <thead>
+                            <tr>
+                                <th>Phim</th>
+                                <th>Người dùng</th>
+                                <th>Đánh giá</th>
+                                <th>Ý kiến</th>
+                                <th>Trạng thái</th>
+                                <th>Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($reviews as $review) { ?>
+                            <?php
                                     $isHidden = isset($review["is_hidden"]) && (int) $review["is_hidden"] === 1;
                                     $posterPath = admin_movie_poster(isset($review["img"]) ? $review["img"] : "");
                                     $reviewerName = !empty($review["reviewer_name"]) ? $review["reviewer_name"] : "Nguoi dung";
@@ -638,123 +648,137 @@ $displayEnd = $filteredTotal > 0 ? min($filteredTotal, $offset + count($reviews)
                                     }
                                     $movieMetaText = !empty($movieMeta) ? implode(" • ", $movieMeta) : "Dang cap nhat";
                                     ?>
-                                    <tr>
-                                        <td>
-                                            <div class="review-movie-cell">
-                                                <div class="review-movie-poster">
-                                                    <?php if ($posterPath !== "") { ?>
-                                                        <img src="<?php echo admin_escape($posterPath); ?>" alt="<?php echo admin_escape($review["movie_title"]); ?>">
-                                                    <?php } else { ?>
-                                                        <div class="review-movie-fallback"><?php echo admin_escape(admin_initials($review["movie_title"])); ?></div>
-                                                    <?php } ?>
-                                                </div>
-                                                <div class="review-movie-copy">
-                                                    <strong><?php echo admin_escape($review["movie_title"]); ?></strong>
-                                                    <small><?php echo admin_escape($movieMetaText); ?></small>
-                                                </div>
+                            <tr>
+                                <td>
+                                    <div class="review-movie-cell">
+                                        <div class="review-movie-poster">
+                                            <?php if ($posterPath !== "") { ?>
+                                            <img src="<?php echo admin_escape($posterPath); ?>"
+                                                alt="<?php echo admin_escape($review["movie_title"]); ?>">
+                                            <?php } else { ?>
+                                            <div class="review-movie-fallback">
+                                                <?php echo admin_escape(admin_initials($review["movie_title"])); ?>
                                             </div>
-                                        </td>
-                                        <td>
-                                            <div class="review-user-cell">
-                                                <div class="review-user-avatar"><?php echo admin_escape(admin_initials($reviewerName)); ?></div>
-                                                <div class="review-user-copy">
-                                                    <strong><?php echo admin_escape($reviewerName); ?></strong>
-                                                    <small><?php echo admin_escape($review["email"] !== "" ? $review["email"] : "@" . $review["username"]); ?></small>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="review-rating-cell">
-                                                <div class="rating-stars"><?php echo admin_render_rating_stars((int) $review["rating"]); ?></div>
-                                                <strong><?php echo admin_escape((int) $review["rating"] . "/5"); ?></strong>
-                                                <small><?php echo admin_escape(admin_format_review_date($review["review_date"])); ?></small>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <p class="review-comment<?php echo $isHidden ? " is-hidden" : ""; ?>"><?php echo admin_escape(admin_review_comment_excerpt($review["comment"])); ?></p>
-                                        </td>
-                                        <td>
-                                            <span class="review-status-badge <?php echo $isHidden ? "is-hidden" : "is-visible"; ?>"><?php echo $isHidden ? "An" : "Hien"; ?></span>
-                                        </td>
-                                        <td>
-                                            <div class="review-action-group">
-                                                <a class="review-action-button <?php echo $isHidden ? "review-action-button-success" : "review-action-button-warning"; ?>" href="index.php?page_layout=xuly_anreview&id=<?php echo (int) $review["review_id"]; ?>&visibility=<?php echo $isHidden ? "hien" : "an"; ?>&keyword=<?php echo urlencode($keyword); ?>&rating=<?php echo urlencode($ratingFilter); ?>&status=<?php echo urlencode($statusFilter); ?>&movie_id=<?php echo (int) $movieFilter; ?>&page=<?php echo (int) $page; ?>" onclick="return confirm('<?php echo $isHidden ? "Hien" : "An"; ?> binh luan nay?')"><?php echo $isHidden ? "&#10003;" : "&#128065;"; ?></a>
-                                                <a class="review-action-button review-action-button-danger" href="index.php?page_layout=xuly_xoareview&id=<?php echo (int) $review["review_id"]; ?>&keyword=<?php echo urlencode($keyword); ?>&rating=<?php echo urlencode($ratingFilter); ?>&status=<?php echo urlencode($statusFilter); ?>&movie_id=<?php echo (int) $movieFilter; ?>&page=<?php echo (int) $page; ?>" onclick="return confirm('Ban co chac chan muon xoa danh gia nay khong?')">&#128465;</a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                <?php } ?>
-                            </tbody>
-                        </table>
-                    </div>
+                                            <?php } ?>
+                                        </div>
+                                        <div class="review-movie-copy">
+                                            <strong><?php echo admin_escape($review["movie_title"]); ?></strong>
+                                            <small><?php echo admin_escape($movieMetaText); ?></small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="review-user-cell">
+                                        <div class="review-user-avatar">
+                                            <?php echo admin_escape(admin_initials($reviewerName)); ?></div>
+                                        <div class="review-user-copy">
+                                            <strong><?php echo admin_escape($reviewerName); ?></strong>
+                                            <small><?php echo admin_escape($review["email"] !== "" ? $review["email"] : "@" . $review["username"]); ?></small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="review-rating-cell">
+                                        <div class="rating-stars">
+                                            <?php echo admin_render_rating_stars((int) $review["rating"]); ?></div>
+                                        <strong><?php echo admin_escape((int) $review["rating"] . "/5"); ?></strong>
+                                        <small><?php echo admin_escape(admin_format_review_date($review["review_date"])); ?></small>
+                                    </div>
+                                </td>
+                                <td>
+                                    <p class="review-comment<?php echo $isHidden ? " is-hidden" : ""; ?>">
+                                        <?php echo admin_escape(admin_review_comment_excerpt($review["comment"])); ?>
+                                    </p>
+                                </td>
+                                <td>
+                                    <span
+                                        class="review-status-badge <?php echo $isHidden ? "is-hidden" : "is-visible"; ?>"><?php echo $isHidden ? "An" : "Hien"; ?></span>
+                                </td>
+                                <td>
+                                    <div class="review-action-group">
+                                        <a class="review-action-button <?php echo $isHidden ? "review-action-button-success" : "review-action-button-warning"; ?>"
+                                            href="index.php?page_layout=xuly_anreview&id=<?php echo (int) $review["review_id"]; ?>&visibility=<?php echo $isHidden ? "hien" : "an"; ?>&keyword=<?php echo urlencode($keyword); ?>&rating=<?php echo urlencode($ratingFilter); ?>&status=<?php echo urlencode($statusFilter); ?>&movie_id=<?php echo (int) $movieFilter; ?>&page=<?php echo (int) $page; ?>"
+                                            onclick="return confirm('<?php echo $isHidden ? "Hien" : "An"; ?> binh luan nay?')"><?php echo $isHidden ? "&#10003;" : "&#128065;"; ?></a>
+                                        <a class="review-action-button review-action-button-danger"
+                                            href="index.php?page_layout=xuly_xoareview&id=<?php echo (int) $review["review_id"]; ?>&keyword=<?php echo urlencode($keyword); ?>&rating=<?php echo urlencode($ratingFilter); ?>&status=<?php echo urlencode($statusFilter); ?>&movie_id=<?php echo (int) $movieFilter; ?>&page=<?php echo (int) $page; ?>"
+                                            onclick="return confirm('Ban co chac chan muon xoa danh gia nay khong?')">&#128465;</a>
+                                    </div>
+                                </td>
+                            </tr>
+                            <?php } ?>
+                        </tbody>
+                    </table>
+                </div>
                 <?php } ?>
 
                 <div class="review-table-footer">
-                    <p>Hien thi <?php echo admin_escape($displayStart); ?>-<?php echo admin_escape($displayEnd); ?> tren <?php echo admin_escape(admin_format_number($filteredTotal)); ?> ket qua</p>
+                    <p>Hiển thị <?php echo admin_escape($displayStart); ?>-<?php echo admin_escape($displayEnd); ?> trên
+                        <?php echo admin_escape(admin_format_number($filteredTotal)); ?> kết quả</p>
 
                     <?php if ($totalPages > 1) { ?>
-                        <nav class="review-pagination" aria-label="Dieu huong phan trang">
-                            <?php if ($page > 1) { ?>
-                                <a class="review-page-button" href="<?php echo admin_escape(admin_review_url(array(
-                                    "keyword" => $keyword,
-                                    "rating" => $ratingFilter,
-                                    "status" => $statusFilter,
-                                    "movie_id" => $movieFilter,
-                                    "page" => $page - 1,
-                                ))); ?>">&lsaquo;</a>
-                            <?php } ?>
+                    <nav class="review-pagination" aria-label="Điều hướng phân trang">
+                        <?php if ($page > 1) { ?>
+                        <a class="review-page-button" href="<?php echo admin_escape(admin_review_url(array(
+                                                                        "keyword" => $keyword,
+                                                                        "rating" => $ratingFilter,
+                                                                        "status" => $statusFilter,
+                                                                        "movie_id" => $movieFilter,
+                                                                        "page" => $page - 1,
+                                                                    ))); ?>">&lsaquo;</a>
+                        <?php } ?>
 
-                            <?php
+                        <?php
                             $startPage = max(1, $page - 2);
                             $endPage = min($totalPages, $page + 2);
 
                             if ($startPage > 1) {
                             ?>
-                                <a class="review-page-button" href="<?php echo admin_escape(admin_review_url(array(
-                                    "keyword" => $keyword,
-                                    "rating" => $ratingFilter,
-                                    "status" => $statusFilter,
-                                    "movie_id" => $movieFilter,
-                                    "page" => 1,
-                                ))); ?>">1</a>
-                                <?php if ($startPage > 2) { ?>
-                                    <span class="review-page-ellipsis">...</span>
-                                <?php } ?>
-                            <?php } ?>
+                        <a class="review-page-button" href="<?php echo admin_escape(admin_review_url(array(
+                                                                        "keyword" => $keyword,
+                                                                        "rating" => $ratingFilter,
+                                                                        "status" => $statusFilter,
+                                                                        "movie_id" => $movieFilter,
+                                                                        "page" => 1,
+                                                                    ))); ?>">1</a>
+                        <?php if ($startPage > 2) { ?>
+                        <span class="review-page-ellipsis">...</span>
+                        <?php } ?>
+                        <?php } ?>
 
-                            <?php for ($pageNumber = $startPage; $pageNumber <= $endPage; $pageNumber++) { ?>
-                                <a class="review-page-button<?php echo $pageNumber === $page ? " is-active" : ""; ?>" href="<?php echo admin_escape(admin_review_url(array(
-                                    "keyword" => $keyword,
-                                    "rating" => $ratingFilter,
-                                    "status" => $statusFilter,
-                                    "movie_id" => $movieFilter,
-                                    "page" => $pageNumber,
-                                ))); ?>"><?php echo (int) $pageNumber; ?></a>
-                            <?php } ?>
+                        <?php for ($pageNumber = $startPage; $pageNumber <= $endPage; $pageNumber++) { ?>
+                        <a class="review-page-button<?php echo $pageNumber === $page ? " is-active" : ""; ?>"
+                            href="<?php echo admin_escape(admin_review_url(array(
+                                                                                                                                "keyword" => $keyword,
+                                                                                                                                "rating" => $ratingFilter,
+                                                                                                                                "status" => $statusFilter,
+                                                                                                                                "movie_id" => $movieFilter,
+                                                                                                                                "page" => $pageNumber,
+                                                                                                                            ))); ?>"><?php echo (int) $pageNumber; ?></a>
+                        <?php } ?>
 
-                            <?php if ($endPage < $totalPages) { ?>
-                                <?php if ($endPage < $totalPages - 1) { ?>
-                                    <span class="review-page-ellipsis">...</span>
-                                <?php } ?>
-                                <a class="review-page-button" href="<?php echo admin_escape(admin_review_url(array(
-                                    "keyword" => $keyword,
-                                    "rating" => $ratingFilter,
-                                    "status" => $statusFilter,
-                                    "movie_id" => $movieFilter,
-                                    "page" => $totalPages,
-                                ))); ?>"><?php echo (int) $totalPages; ?></a>
-                            <?php } ?>
+                        <?php if ($endPage < $totalPages) { ?>
+                        <?php if ($endPage < $totalPages - 1) { ?>
+                        <span class="review-page-ellipsis">...</span>
+                        <?php } ?>
+                        <a class="review-page-button" href="<?php echo admin_escape(admin_review_url(array(
+                                                                        "keyword" => $keyword,
+                                                                        "rating" => $ratingFilter,
+                                                                        "status" => $statusFilter,
+                                                                        "movie_id" => $movieFilter,
+                                                                        "page" => $totalPages,
+                                                                    ))); ?>"><?php echo (int) $totalPages; ?></a>
+                        <?php } ?>
 
-                            <?php if ($page < $totalPages) { ?>
-                                <a class="review-page-button" href="<?php echo admin_escape(admin_review_url(array(
-                                    "keyword" => $keyword,
-                                    "rating" => $ratingFilter,
-                                    "status" => $statusFilter,
-                                    "movie_id" => $movieFilter,
-                                    "page" => $page + 1,
-                                ))); ?>">&rsaquo;</a>
-                            <?php } ?>
-                        </nav>
+                        <?php if ($page < $totalPages) { ?>
+                        <a class="review-page-button" href="<?php echo admin_escape(admin_review_url(array(
+                                                                        "keyword" => $keyword,
+                                                                        "rating" => $ratingFilter,
+                                                                        "status" => $statusFilter,
+                                                                        "movie_id" => $movieFilter,
+                                                                        "page" => $page + 1,
+                                                                    ))); ?>">&rsaquo;</a>
+                        <?php } ?>
+                    </nav>
                     <?php } ?>
                 </div>
             </section>
@@ -778,4 +802,5 @@ $displayEnd = $filteredTotal > 0 ? min($filteredTotal, $offset + count($reviews)
     })();
     </script>
 </body>
+
 </html>
