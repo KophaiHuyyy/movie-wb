@@ -36,7 +36,7 @@ if ($listtheloai) {
     <header class="site-header">
         <div class="topbar">
             <a class="brand" href="index.php?page_layout=home">
-                <img class="brand-logo" src="anhnen/IT (4).png" alt="ITmovie">
+                <img class="brand-logo" src="anhnen/logo_1.png" alt="ITmovie">
                 <div class="brand-copy">
                     <span class="brand-title">ITmovie</span>
                     <span class="brand-subtitle">Review và xem phim mỗi ngày</span>
